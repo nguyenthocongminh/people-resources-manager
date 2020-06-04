@@ -2,6 +2,7 @@
 #define PERSONNELBUILDER_H
 
 #include <string>
+#include <list>
 using namespace std;
 
 class Personnel;
@@ -37,7 +38,7 @@ public:
     PersonnelBuilder &setDepartment(const string &department);
 
 public:
-    Personnel *build();
+    Personnel *build(list<string> &error);
 };
 
 #endif // PERSONNELBUILDER_H

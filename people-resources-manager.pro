@@ -7,6 +7,8 @@ SOURCES += \
         main.cpp
 
 HEADERS += \
+    ActionEvent.h \
+    ActionModule.h \
     FileIOModule.h \
     Personnel.h \
     PersonnelBuilder.h \
