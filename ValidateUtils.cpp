@@ -18,15 +18,25 @@ using namespace std;
 const list<string> ValidateUtils::validateEmployee(Employee &em)
 {
     list<string> validate;
-    Employee *oldEm = FileIoUtils::findEmployeeById(em.id());
-    
-    if(oldEm != nullptr) {
-        string errorId = "Trung id : " + em.id();
+
+    if (!em.id().empty()) {
+        Employee *oldEm = FileIoUtils::findEmployeeById(em.id());
+
+        if(oldEm != nullptr) {
+            string errorId = "Trung id : " + em.id();
+            validate.push_back(errorId);
+        }
+    } else {
+        string errorId = "ID khong duoc de trong";
         validate.push_back(errorId);
+    }
+
+    if (em.name().empty()) {
+        string errorName = "Ten khong duoc de trong";
+        validate.push_back(errorName);
     }
     
     if(!regex_match (em.dateOfBirth(), regex("^([0-2][0-9]|(3)[0-1])(\\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}$"))) {
-
         string errorDateOfBirth = "Ngay sinh khong dung dd/MM/yyyy";
         validate.push_back(errorDateOfBirth);
     }
