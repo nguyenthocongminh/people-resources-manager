@@ -26,7 +26,7 @@ public:
     static const list<Employee *> listEmployee();
     static bool addEmployee(Employee *employee);
     static Employee * findEmployeeById(string &id);
-    
+    static void refeshData();
 };
 
 #endif /* FileIoUtils_hpp */

@@ -41,7 +41,7 @@ void startApplication(){
 //                system("cls"); // Enable for win
                 
                 cout<<"\n\nQUIT \n\n";
-                sleep(3);
+                sleep(1);
                 return;
             case 1:
                 system("clear"); // Enable for mac, linux

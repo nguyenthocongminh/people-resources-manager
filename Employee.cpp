@@ -44,6 +44,6 @@ const string &Employee::department() const
 
 void Employee::printInfo() const
 {
-    cout << _id << " - " << _name << " - " << _dateOfBirth << " - "
-    << _address << " - " << _department << "\n" << endl;
+    cout << _id << "\t\t" << _name << "\t\t" << _dateOfBirth << "\t\t"
+    << _address << "\t\t" << _department << "\n" << endl;
 }

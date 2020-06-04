@@ -16,7 +16,7 @@ using namespace std;
 
 EmployeeManager::EmployeeManager()
 {
-    
+    FileIoUtils::refeshData();
 }
 EmployeeManager *EmployeeManager::_instance = nullptr;
 
@@ -37,20 +37,22 @@ void EmployeeManager::insertEmployee()
     string address;
     string department;
     
-    cout << "\n Nhap id: ";
-    cin >> id;
+    cin.get();
     
-    cout << "\n Nhap ten: ";
-    cin >> name;
+    cout << "\nNhap id: ";
+    getline(cin, id);
     
-    cout << "\n Nhap ngay sinh: ";
-    cin >> dateOfBirth;
+    cout << "\nNhap ten: ";
+    getline(cin, name);
     
-    cout << "\n Nhap dia chi: ";
-    cin >> address;
+    cout << "\nNhap ngay sinh: ";
+    getline(cin, dateOfBirth);
     
-    cout << "\n Nhap phong ban: ";
-    cin >> department;
+    cout << "\nNhap dia chi: ";
+    getline(cin, address);
+    
+    cout << "\nNhap phong ban: ";
+    getline(cin, department);
     
     Employee *employee = new Employee(id, name, dateOfBirth, address, department);
     
@@ -74,6 +76,10 @@ void EmployeeManager::findEmployeeById()
 
 void EmployeeManager::printEmployees()
 {
+    cout<<"\n----------------------------------------------------------------------------";
+    cout<<"\n ID     |     TEN     |     NGAYSINH     |     PHONG     |     DIA CHI";
+    cout<<"\n----------------------------------------------------------------------------\n";
+    
     list<Employee *> employees = FileIoUtils::listEmployee();
     list<Employee *>::const_iterator it;
     for (it = employees.begin(); it != employees.end(); it++) {

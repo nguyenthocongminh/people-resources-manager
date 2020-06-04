@@ -8,8 +8,12 @@
 
 #include <list>
 #include <string>
+#include <iostream>
+
 #include "Employee.h"
 #include "FileIoUtils.h"
+
+using namespace std;
 
 string FileIoUtils::_resourceFile = "./employees.txt";
 
@@ -17,19 +21,24 @@ list<Employee *> FileIoUtils::_employees;
 
 const list<Employee *> FileIoUtils::listEmployee()
 {
-//    TODO: read from file
     return FileIoUtils::_employees;
 };
 
 bool FileIoUtils::addEmployee(Employee *employee){
-//    TODO: write into file
+    
+    FILE  *file;
+    file = fopen(FileIoUtils::_resourceFile.c_str(),"ab+");
+    
+    fprintf(file, "%s %s %s %s %s \n", employee->id().c_str(), employee->name().c_str(), employee->dateOfBirth().c_str(), employee->department().c_str(), employee->address().c_str());
+    
+    fclose(file);
+    
     FileIoUtils::_employees.push_back(employee);
     return true;
 }
 
 Employee* FileIoUtils::findEmployeeById(string &id)
 {
-//    TODO: get imployee from file
     list<Employee *>::const_iterator it;
     for (it = _employees.begin(); it != _employees.end(); it++) {
         if ((*it)->id() ==  id ) {
@@ -38,4 +47,26 @@ Employee* FileIoUtils::findEmployeeById(string &id)
     }
     
     return nullptr;
+}
+
+void FileIoUtils::refeshData()
+{
+    char id[20], name[200], dateOfBirth[20], address[300], department[200];
+    
+    FILE  *file;
+    file = fopen(FileIoUtils::_resourceFile.c_str(),"r");
+    
+    if (file == nullptr) {
+        return;
+    }
+    while(
+          fscanf(file, "%s %s %s %s %s", &id[0], &name[0], &dateOfBirth[0], &address[0], &department[0])!= EOF) {
+        string _id(id);
+        string _name(name);
+        string _dateOfBirth(dateOfBirth);
+        string _address(address);
+        string _department(department);
+        Employee *em = new Employee(_id, _name, _dateOfBirth, _address, _department);
+        FileIoUtils::_employees.push_back(em);
+    }
 }
