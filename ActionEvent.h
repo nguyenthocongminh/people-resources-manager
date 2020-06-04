@@ -1,0 +1,4 @@
+#ifndef ACTIONEVENT_H
+#define ACTIONEVENT_H
+
+#endif // ACTIONEVENT_H

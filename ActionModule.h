@@ -1,0 +1,4 @@
+#ifndef ACTIONMODULE_H
+#define ACTIONMODULE_H
+
+#endif // ACTIONMODULE_H
