@@ -18,17 +18,17 @@ void startApplication(){
 //        system("cls"); // Enable for win
         
         // Options to choose an action
-        cout << "\n\tENTER   1:   Nhap thong tin nhan vien";
+        cout << "\n\t1:   Nhap thong tin nhan vien";
         cout << "\n\t------------------------------------------------";
-        cout << "\n\tENTER   2:   Tim thong tin nhan vien";
+        cout << "\n\t2:   Tim thong tin nhan vien";
         cout << "\n\t------------------------------------------------";
-        cout << "\n\tENTER   3:   Danh sach nhan vien";
+        cout << "\n\t3:   Danh sach nhan vien";
         cout << "\n\t------------------------------------------------";
-        cout << "\n\tENTER   4:   Import csv";
+        cout << "\n\t4:   Import csv";
         cout << "\n\t------------------------------------------------";
-        cout << "\n\tENTER   5:   Danh sach diem danh";
+        cout << "\n\t5:   Danh sach diem danh";
         cout << "\n\t------------------------------------------------";
-        cout << "\n\tENTER   0:   Thoat     ";
+        cout << "\n\t0:   Thoat     ";
         cout << "\n\t------------------------------------------------";
         cout << "\n\n\tChon chuc nang: ";
         

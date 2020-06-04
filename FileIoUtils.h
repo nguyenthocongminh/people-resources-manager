@@ -25,7 +25,7 @@ private:
 public:
     static const list<Employee *> listEmployee();
     static bool addEmployee(Employee *employee);
-    static Employee * findEmployeeById(string &id);
+    static Employee * findEmployeeById(const string &id);
     static void refeshData();
 };
 

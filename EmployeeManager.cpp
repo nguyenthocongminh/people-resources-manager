@@ -11,6 +11,7 @@
 #include "Employee.h"
 #include "EmployeeManager.h"
 #include "FileIoUtils.h"
+#include "ValidateUtils.h"
 
 using namespace std;
 
@@ -56,8 +57,16 @@ void EmployeeManager::insertEmployee()
     
     Employee *employee = new Employee(id, name, dateOfBirth, address, department);
     
-    FileIoUtils::addEmployee(employee);
+    list<string> validate = ValidateUtils::validateEmployee(*employee);
     
+    if(validate.empty()){
+        FileIoUtils::addEmployee(employee);
+        return;
+    }
+    
+    ValidateUtils::printValid(validate);
+    cout << "Nhan Enter de tiep tuc";
+    cin.get();
 }
 
 void EmployeeManager::findEmployeeById()

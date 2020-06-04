@@ -37,7 +37,7 @@ bool FileIoUtils::addEmployee(Employee *employee){
     return true;
 }
 
-Employee* FileIoUtils::findEmployeeById(string &id)
+Employee* FileIoUtils::findEmployeeById(const string &id)
 {
     list<Employee *>::const_iterator it;
     for (it = _employees.begin(); it != _employees.end(); it++) {
