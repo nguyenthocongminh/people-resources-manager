@@ -55,8 +55,10 @@ void EmployeeManager::insertEmployee()
     getline(cin, department);
     
     Employee *employee = new Employee(id, name, dateOfBirth, address, department);
-    
-    FileIoUtils::addEmployee(employee);
+
+    if (employee->validate()) {
+        FileIoUtils::addEmployee(employee);
+    }
     
 }
 

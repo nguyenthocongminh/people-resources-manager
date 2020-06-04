@@ -17,12 +17,13 @@ private:
 
 public:
     Employee(const string &id,
-              const string &name,
-              const string &dateOfBirth,
-              const string &address,
-              const string &department);
+             const string &name,
+             const string &dateOfBirth,
+             const string &address,
+             const string &department);
 
 public:
+    bool validate() const;
     
     const string &id() const;
     const string &name() const;

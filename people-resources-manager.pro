@@ -4,13 +4,12 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        Employee.cpp \
+        EmployeeManager.cpp \
+        FileIoUtils.cpp \
         main.cpp
 
 HEADERS += \
-    ActionEvent.h \
-    ActionModule.h \
-    FileIOModule.h \
-    Personnel.h \
-    PersonnelBuilder.h \
-    PersonnelBuilderFactory.h \
-    PersonnelManager.h
+    Employee.h \
+    EmployeeManager.h \
+    FileIoUtils.h
