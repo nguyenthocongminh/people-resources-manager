@@ -25,11 +25,11 @@ const list<string> ValidateUtils::validateEmployee(Employee &em)
         validate.push_back(errorId);
     }
     
-//    if(!regex_match (em.dateOfBirth(), regex("^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$"))) {
-//        
-//        string errorAddress = "Ngay sinh khong dung dd/MM/yyyy";
-//        validate.push_back(errorAddress);
-//    }
+    if(!regex_match (em.dateOfBirth(), regex("^([0-2][0-9]|(3)[0-1])(\\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}$"))) {
+
+        string errorAddress = "Ngay sinh khong dung dd/MM/yyyy";
+        validate.push_back(errorAddress);
+    }
     
     if(em.address().empty()){
         string errorAddress = "Dia chi khong duoc de trong";
