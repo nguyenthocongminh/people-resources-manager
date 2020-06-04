@@ -13,23 +13,29 @@
 
 string FileIoUtils::_resourceFile = "./employees.txt";
 
-list<Employee> FileIoUtils::_employees;
+list<Employee *> FileIoUtils::_employees;
 
-const list<Employee> &FileIoUtils::listEmployee()
+const list<Employee *> FileIoUtils::listEmployee()
 {
 //    TODO: read from file
-    return _employees;
+    return FileIoUtils::_employees;
 };
 
-bool FileIoUtils::addEmployee(Employee &employee){
+bool FileIoUtils::addEmployee(Employee *employee){
 //    TODO: write into file
-    _employees.push_back(employee);
+    FileIoUtils::_employees.push_back(employee);
     return true;
 }
 
-Employee FileIoUtils::findEmployeeById(string &id)
+Employee* FileIoUtils::findEmployeeById(string &id)
 {
 //    TODO: get imployee from file
-    Employee *employee = new Employee(id, "name", "dobirth", "", "");
-    return *employee;
+    list<Employee *>::const_iterator it;
+    for (it = _employees.begin(); it != _employees.end(); it++) {
+        if ((*it)->id() ==  id ) {
+            return *it;
+        }
+    }
+    
+    return nullptr;
 }

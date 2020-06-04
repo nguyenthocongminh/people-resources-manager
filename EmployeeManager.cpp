@@ -49,31 +49,34 @@ void EmployeeManager::insertEmployee()
     cout << "\n Nhap dia chi: ";
     cin >> address;
     
-    cout <<"\n Nhap phong ban: ";
+    cout << "\n Nhap phong ban: ";
     cin >> department;
     
     Employee *employee = new Employee(id, name, dateOfBirth, address, department);
     
-    FileIoUtils::addEmployee(*employee);
+    FileIoUtils::addEmployee(employee);
     
 }
 
 void EmployeeManager::findEmployeeById()
 {
     string id;
-    cout << "\n Nhap id: ";
+    cout << "\nNhap id: ";
     cin >> id;
     
-    Employee employee = FileIoUtils::findEmployeeById(id);
-    employee.printInfo();
+    Employee *employee = FileIoUtils::findEmployeeById(id);
+    if(employee != nullptr) {
+        employee->printInfo();
+    } else {
+        cout << "Khong tim thay nhan vien id = " << id << "\n";
+    }
 }
 
 void EmployeeManager::printEmployees()
 {
-    list<Employee> employees = FileIoUtils::listEmployee();
-    list<Employee>::const_iterator it;
+    list<Employee *> employees = FileIoUtils::listEmployee();
+    list<Employee *>::const_iterator it;
     for (it = employees.begin(); it != employees.end(); it++) {
-        (it)->printInfo();
-        std::cout << "\n";
+        (*it)->printInfo();
     }
 }
