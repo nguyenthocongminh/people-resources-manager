@@ -11,12 +11,13 @@
 #include "Employee.h"
 #include "EmployeeManager.h"
 #include "FileIoUtils.h"
+#include "ValidateUtils.h"
 
 using namespace std;
 
 EmployeeManager::EmployeeManager()
 {
-    
+    FileIoUtils::refeshData();
 }
 EmployeeManager *EmployeeManager::_instance = nullptr;
 
@@ -37,43 +38,60 @@ void EmployeeManager::insertEmployee()
     string address;
     string department;
     
-    cout << "\n Nhap id: ";
-    cin >> id;
+    cin.get();
     
-    cout << "\n Nhap ten: ";
-    cin >> name;
+    cout << "\nNhap id: ";
+    getline(cin, id);
     
-    cout << "\n Nhap ngay sinh: ";
-    cin >> dateOfBirth;
+    cout << "\nNhap ten: ";
+    getline(cin, name);
     
-    cout << "\n Nhap dia chi: ";
-    cin >> address;
+    cout << "\nNhap ngay sinh: ";
+    getline(cin, dateOfBirth);
     
-    cout <<"\n Nhap phong ban: ";
-    cin >> department;
+    cout << "\nNhap dia chi: ";
+    getline(cin, address);
+    
+    cout << "\nNhap phong ban: ";
+    getline(cin, department);
     
     Employee *employee = new Employee(id, name, dateOfBirth, address, department);
     
-    FileIoUtils::addEmployee(*employee);
+    list<string> validate = ValidateUtils::validateEmployee(*employee);
     
+    if(validate.empty()){
+        FileIoUtils::addEmployee(employee);
+        return;
+    }
+    
+    ValidateUtils::printValid(validate);
+    cout << "Nhan Enter de tiep tuc";
+    cin.get();
 }
 
 void EmployeeManager::findEmployeeById()
 {
     string id;
-    cout << "\n Nhap id: ";
+    cout << "\nNhap id: ";
     cin >> id;
     
-    Employee employee = FileIoUtils::findEmployeeById(id);
-    employee.printInfo();
+    Employee *employee = FileIoUtils::findEmployeeById(id);
+    if(employee != nullptr) {
+        employee->printInfo();
+    } else {
+        cout << "Khong tim thay nhan vien id = " << id << "\n";
+    }
 }
 
 void EmployeeManager::printEmployees()
 {
-    list<Employee> employees = FileIoUtils::listEmployee();
-    list<Employee>::const_iterator it;
+    cout<<"\n----------------------------------------------------------------------------";
+    cout<<"\n ID     |     TEN     |     NGAYSINH     |     DIA CHI     |     PHONG";
+    cout<<"\n----------------------------------------------------------------------------\n";
+    
+    list<Employee *> employees = FileIoUtils::listEmployee();
+    list<Employee *>::const_iterator it;
     for (it = employees.begin(); it != employees.end(); it++) {
-        (it)->printInfo();
-        std::cout << "\n";
+        (*it)->printInfo();
     }
 }

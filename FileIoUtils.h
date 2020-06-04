@@ -20,13 +20,13 @@ class FileIoUtils {
     
 private:
     static string _resourceFile;
-    static list<Employee> _employees;
+    static list<Employee *> _employees;
     
 public:
-    static const list<Employee> &listEmployee();
-    static bool addEmployee(Employee &employee);
-    static Employee findEmployeeById(string &id);
-    
+    static const list<Employee *> listEmployee();
+    static bool addEmployee(Employee *employee);
+    static Employee * findEmployeeById(const string &id);
+    static void refeshData();
 };
 
 #endif /* FileIoUtils_hpp */
