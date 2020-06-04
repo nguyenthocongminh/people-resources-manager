@@ -27,8 +27,8 @@ const list<string> ValidateUtils::validateEmployee(Employee &em)
     
     if(!regex_match (em.dateOfBirth(), regex("^([0-2][0-9]|(3)[0-1])(\\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}$"))) {
 
-        string errorAddress = "Ngay sinh khong dung dd/MM/yyyy";
-        validate.push_back(errorAddress);
+        string errorDateOfBirth = "Ngay sinh khong dung dd/MM/yyyy";
+        validate.push_back(errorDateOfBirth);
     }
     
     if(em.address().empty()){
