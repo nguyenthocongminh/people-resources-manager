@@ -29,7 +29,7 @@ bool FileIoUtils::addEmployee(Employee *employee){
     FILE  *file;
     file = fopen(FileIoUtils::_resourceFile.c_str(),"ab+");
     
-    fprintf(file, "%s %s %s %s %s \n", employee->id().c_str(), employee->name().c_str(), employee->dateOfBirth().c_str(), employee->department().c_str(), employee->address().c_str());
+    fprintf(file, "%s %s %s %s %s \n", employee->id().c_str(), employee->name().c_str(), employee->dateOfBirth().c_str(), employee->address().c_str(), employee->department().c_str());
     
     fclose(file);
     
