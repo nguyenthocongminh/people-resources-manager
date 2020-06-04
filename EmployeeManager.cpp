@@ -77,7 +77,7 @@ void EmployeeManager::findEmployeeById()
 void EmployeeManager::printEmployees()
 {
     cout<<"\n----------------------------------------------------------------------------";
-    cout<<"\n ID     |     TEN     |     NGAYSINH     |     PHONG     |     DIA CHI";
+    cout<<"\n ID     |     TEN     |     NGAYSINH     |     DIA CHI     |     PHONG";
     cout<<"\n----------------------------------------------------------------------------\n";
     
     list<Employee *> employees = FileIoUtils::listEmployee();
