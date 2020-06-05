@@ -56,11 +56,6 @@ int FileIoUtils::increaseSizeResource()
     int size = FileIoUtils::getSizeofResource();
     size += 1;
     
-//    FILE  *file;
-//    file = fopen(FileIoUtils::_sizeOfResourceFile.c_str(),"w+");
-//    fprintf(file, "%d", size);
-//    fclose(file);
-    
     ofstream fstream_ob;
     fstream_ob.open(FileIoUtils::_sizeOfResourceFile.c_str(), ios::trunc);
     fstream_ob << size;
@@ -94,12 +89,13 @@ void FileIoUtils::refeshData()
     ifstream ifstream_ob;
     ifstream_ob.open(FileIoUtils::_resourceFile.c_str(), ios::in);
     ifstream_ob.read( (char *) & employees, sizeof(employees));
+        ifstream_ob.close();
     
     FileIoUtils::_employees.clear();
+    
     for(int i = 0; i < size; i++)
     {
-        static Employee e = employees[i];
-        FileIoUtils::_employees.push_back(&e);
+        Employee *em = new Employee(employees[i].id(), employees[i].name(), employees[i].dateOfBirth(), employees[i].address(), employees[i].department());
+        FileIoUtils::_employees.push_back(em);
     }
-    ifstream_ob.close();
 }
