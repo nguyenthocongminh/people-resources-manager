@@ -20,6 +20,9 @@ Employee::Employee(const string &id,
 : _id(id), _name(name), _dateOfBirth(dateOfBirth), _address(address), _department(department)
 {
 }
+Employee::Employee()
+{
+}
 
 const string &Employee::id() const
 {

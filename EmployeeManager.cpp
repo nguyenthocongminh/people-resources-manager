@@ -91,7 +91,8 @@ void EmployeeManager::printEmployees()
     
     list<Employee *> employees = FileIoUtils::listEmployee();
     list<Employee *>::const_iterator it;
-    for (it = employees.begin(); it != employees.end(); it++) {
+    for (it = employees.begin(); it != employees.end(); it++)
+    {
         (*it)->printInfo();
     }
 }

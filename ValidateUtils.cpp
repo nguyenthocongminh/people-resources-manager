@@ -41,11 +41,11 @@ const list<string> ValidateUtils::validateEmployee(Employee &em)
         validate.push_back(errorDateOfBirth);
     }
     
-    if(em.address().empty()){
+    if(em.address().empty()) {
         string errorAddress = "Dia chi khong duoc de trong";
         validate.push_back(errorAddress);
     }
-    if(em.department().empty()){
+    if(em.department().empty()) {
         string errorDepartment = "Phong ban khong duoc de trong";
         validate.push_back(errorDepartment);
     }
@@ -56,7 +56,8 @@ const list<string> ValidateUtils::validateEmployee(Employee &em)
 const void ValidateUtils::printValid(list<string> & valid)
 {
     cout << "\n*******\n";
-    for(auto const& i : valid){
+    for(auto const& i : valid)
+    {
         cout << i << "\n";
     }
     cout << "\n*******\n";

@@ -9,6 +9,7 @@
 #include <list>
 #include <string>
 #include <iostream>
+#include<fstream>
 
 #include "Employee.h"
 #include "FileIoUtils.h"
@@ -16,6 +17,7 @@
 using namespace std;
 
 string FileIoUtils::_resourceFile = "./employees.txt";
+string FileIoUtils::_sizeOfResourceFile = "./employees-size.txt";
 
 list<Employee *> FileIoUtils::_employees;
 
@@ -26,13 +28,12 @@ const list<Employee *> FileIoUtils::listEmployee()
 
 bool FileIoUtils::addEmployee(Employee *employee){
     
-    FILE  *file;
-    file = fopen(FileIoUtils::_resourceFile.c_str(),"ab+");
+    ofstream fstream_ob;
+    fstream_ob.open(FileIoUtils::_resourceFile.c_str(), ios::app);
+    fstream_ob.write( (char *) employee, sizeof(*employee));
+    fstream_ob.close();
     
-    fprintf(file, "%s %s %s %s %s \n", employee->id().c_str(), employee->name().c_str(), employee->dateOfBirth().c_str(), employee->address().c_str(), employee->department().c_str());
-    
-    fclose(file);
-    
+    FileIoUtils::increaseSizeResource();
     FileIoUtils::_employees.push_back(employee);
     return true;
 }
@@ -49,24 +50,56 @@ Employee* FileIoUtils::findEmployeeById(const string &id)
     return nullptr;
 }
 
+int FileIoUtils::increaseSizeResource()
+{
+  
+    int size = FileIoUtils::getSizeofResource();
+    size += 1;
+    
+//    FILE  *file;
+//    file = fopen(FileIoUtils::_sizeOfResourceFile.c_str(),"w+");
+//    fprintf(file, "%d", size);
+//    fclose(file);
+    
+    ofstream fstream_ob;
+    fstream_ob.open(FileIoUtils::_sizeOfResourceFile.c_str(), ios::trunc);
+    fstream_ob << size;
+    fstream_ob.close();
+    
+    return size;
+}
+
+int FileIoUtils::getSizeofResource()
+{
+    int size = 0;
+    ifstream ifstream_size;
+    ifstream_size.open(FileIoUtils::_sizeOfResourceFile.c_str(), ios::in);
+    if(!ifstream_size.is_open()){
+        return 0;
+    }
+    
+    ifstream_size >> size;
+    return size;
+}
+
 void FileIoUtils::refeshData()
 {
-    char id[20], name[200], dateOfBirth[20], address[300], department[200];
     
-    FILE  *file;
-    file = fopen(FileIoUtils::_resourceFile.c_str(),"r");
-    
-    if (file == nullptr) {
+    int size = FileIoUtils::getSizeofResource();
+    if(size == 0){
         return;
     }
-    while(
-          fscanf(file, "%s %s %s %s %s", &id[0], &name[0], &dateOfBirth[0], &address[0], &department[0])!= EOF) {
-        string _id(id);
-        string _name(name);
-        string _dateOfBirth(dateOfBirth);
-        string _address(address);
-        string _department(department);
-        Employee *em = new Employee(_id, _name, _dateOfBirth, _address, _department);
-        FileIoUtils::_employees.push_back(em);
+    Employee employees[size];
+    
+    ifstream ifstream_ob;
+    ifstream_ob.open(FileIoUtils::_resourceFile.c_str(), ios::in);
+    ifstream_ob.read( (char *) & employees, sizeof(employees));
+    
+    FileIoUtils::_employees.clear();
+    for(int i = 0; i < size; i++)
+    {
+        static Employee e = employees[i];
+        FileIoUtils::_employees.push_back(&e);
     }
+    ifstream_ob.close();
 }

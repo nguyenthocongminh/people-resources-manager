@@ -21,6 +21,8 @@ public:
               const string &dateOfBirth,
               const string &address,
               const string &department);
+    
+    Employee();
 
 public:
     
