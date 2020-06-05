@@ -65,7 +65,7 @@ void EmployeeManager::insertEmployee()
     }
     
     ValidateUtils::printValid(validate);
-    cout << "Nhan Enter de tiep tuc";
+    cout << "Nhan Enter de tiep tuc\n";
     cin.get();
 }
 
