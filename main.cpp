@@ -1,6 +1,14 @@
-#include <iostream>
-//#include <windows.h> // Enable for window
+#ifdef _WIN32
+#include <windows.h> // Enable for window
+#define _CLEAR system("cls")
+#define _SLEEP(n) Sleep(n)
+#endif
+#if defined(unix) || defined(__unix__) || defined(__unix)
 #include <unistd.h> // Enable for mac, linux
+#define _CLEAR system("clear")
+#define _SLEEP(n) sleep(n)
+#endif
+#include <iostream>
 #include "EmployeeManager.h"
 using namespace std;
 
@@ -14,9 +22,6 @@ int main()
 
 void startApplication(){
     while(true){
-//        system("clear"); // Enable for mac, linux
-//        system("cls"); // Enable for win
-        
         // Options to choose an action
         cout << "\n\t1:   Nhap thong tin nhan vien";
         cout << "\n\t------------------------------------------------";
@@ -35,45 +40,32 @@ void startApplication(){
         int choice;
         cin >> choice;
         
+        _CLEAR;
+
         switch (choice) {
             case 0:
-                system("clear"); // Enable for mac, linux
-//                system("cls"); // Enable for win
-                
                 cout<<"\n\nQUIT \n\n";
-                sleep(1);
+                _SLEEP(1);
                 return;
             case 1:
-                system("clear"); // Enable for mac, linux
-//                system("cls"); // Enable for win
                 cout << "Nhap thong tin nhan vien\n";
                 EmployeeManager::instance()->insertEmployee();
                 break;
             case 2:
-                system("clear"); // Enable for mac, linux
-//                system("cls"); // Enable for win
                 cout << "Tim thong tin nhan vien\n";
                 EmployeeManager::instance()->findEmployeeById();
                 break;
             case 3:
-                system("clear"); // Enable for mac, linux
-//                system("cls"); // Enable for win
                 cout << "Danh sach nhan vien:\n";
                 EmployeeManager::instance()->printEmployees();
                 break;
             case 4:
-                system("clear"); // Enable for mac, linux
-//                system("cls"); // Enable for win
                 cout << "Import csv: method has not support";
                 break;
             case 5:
-                system("clear"); // Enable for mac, linux
-//                system("cls"); // Enable for win
                 cout << "Diem danh: method has not support";
                 break;
             case 6:
-                system("clear"); // Enable for mac, linux
-//                system("cls"); // Enable for win
                 cout << "Danh sach diem danh: method has not support";
                 break;
             default:

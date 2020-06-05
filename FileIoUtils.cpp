@@ -9,7 +9,7 @@
 #include <list>
 #include <string>
 #include <iostream>
-#include<fstream>
+#include <fstream>
 
 #include "Employee.h"
 #include "FileIoUtils.h"
@@ -89,7 +89,7 @@ void FileIoUtils::refeshData()
     ifstream ifstream_ob;
     ifstream_ob.open(FileIoUtils::_resourceFile.c_str(), ios::in);
     ifstream_ob.read( (char *) & employees, sizeof(employees));
-        ifstream_ob.close();
+    ifstream_ob.close();
     
     FileIoUtils::_employees.clear();
     
