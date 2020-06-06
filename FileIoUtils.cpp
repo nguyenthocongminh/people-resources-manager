@@ -10,6 +10,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 #include "Employee.h"
 #include "FileIoUtils.h"
@@ -27,10 +28,13 @@ const list<Employee *> FileIoUtils::listEmployee()
 };
 
 bool FileIoUtils::addEmployee(Employee *employee){
-    
     ofstream fstream_ob;
     fstream_ob.open(FileIoUtils::_resourceFile.c_str(), ios::app);
-    fstream_ob.write( (char *) employee, sizeof(*employee));
+    fstream_ob << employee->id() << ","
+               << employee->name() << ","
+               << employee->dateOfBirth() << ","
+               << employee->address() << ","
+               << employee->department() << endl;
     fstream_ob.close();
     
     FileIoUtils::increaseSizeResource();
@@ -78,24 +82,22 @@ int FileIoUtils::getSizeofResource()
 }
 
 void FileIoUtils::refeshData()
-{
-    
-    int size = FileIoUtils::getSizeofResource();
-    if(size == 0){
-        return;
-    }
-    Employee employees[size];
-    
+{  
+    FileIoUtils::_employees.clear();
+
+    string row[5];
+
     ifstream ifstream_ob;
     ifstream_ob.open(FileIoUtils::_resourceFile.c_str(), ios::in);
-    ifstream_ob.read( (char *) & employees, sizeof(employees));
-    ifstream_ob.close();
-    
-    FileIoUtils::_employees.clear();
-    
-    for(int i = 0; i < size; i++)
-    {
-        Employee *em = new Employee(employees[i].id(), employees[i].name(), employees[i].dateOfBirth(), employees[i].address(), employees[i].department());
+    string line, word;
+    while (ifstream_ob >> line) {
+        stringstream s(line);
+        int i=0;
+        while (getline(s, word, ',')) {
+            row[i++] = word;
+        }
+        Employee *em = new Employee(row[0], row[1], row[2], row[3], row[4]);
         FileIoUtils::_employees.push_back(em);
     }
+    ifstream_ob.close();
 }
