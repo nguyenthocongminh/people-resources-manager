@@ -17,7 +17,7 @@ using namespace std;
 
 EmployeeManager::EmployeeManager()
 {
-    FileIoUtils::refeshData();
+    this->refeshData();
 }
 EmployeeManager *EmployeeManager::_instance = nullptr;
 
@@ -57,10 +57,11 @@ void EmployeeManager::insertEmployee()
     
     Employee *employee = new Employee(id, name, dateOfBirth, address, department);
     
-    list<string> validate = ValidateUtils::validateEmployee(*employee);
+    list<string> validate = ValidateUtils::validateEmployee(*employee, _employees);
     
     if(validate.empty()){
         FileIoUtils::addEmployee(employee);
+        this->_employees.push_back(*employee);
         return;
     }
     
@@ -75,12 +76,15 @@ void EmployeeManager::findEmployeeById()
     cout << "\nNhap id: ";
     cin >> id;
     
-    Employee *employee = FileIoUtils::findEmployeeById(id);
-    if(employee != nullptr) {
-        employee->printInfo();
-    } else {
-        cout << "Khong tim thay nhan vien id = " << id << "\n";
+    list<Employee>::const_iterator it;
+    for (it = _employees.begin(); it != _employees.end(); it++) {
+        if (it->id() ==  id ) {
+            it->printInfo();
+            return;
+        }
     }
+    
+    cout << "Khong tim thay nhan vien id = " << id << "\n";
 }
 
 void EmployeeManager::printEmployees()
@@ -89,10 +93,15 @@ void EmployeeManager::printEmployees()
     cout<<"\n ID     |     TEN     |     NGAYSINH     |     DIA CHI     |     PHONG";
     cout<<"\n----------------------------------------------------------------------------\n";
     
-    list<Employee *> employees = FileIoUtils::listEmployee();
-    list<Employee *>::const_iterator it;
-    for (it = employees.begin(); it != employees.end(); it++)
+    list<Employee>::const_iterator it;
+    for (it = _employees.begin(); it != _employees.end(); it++)
     {
-        (*it)->printInfo();
+        it->printInfo();
     }
+}
+
+void EmployeeManager::refeshData()
+{
+    _employees.clear();
+    FileIoUtils::loadAllEmployee(_employees);
 }

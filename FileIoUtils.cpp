@@ -19,13 +19,6 @@ using namespace std;
 string FileIoUtils::_resourceFile = "./employees.txt";
 string FileIoUtils::_sizeOfResourceFile = "./employees-size.txt";
 
-list<Employee *> FileIoUtils::_employees;
-
-const list<Employee *> FileIoUtils::listEmployee()
-{
-    return FileIoUtils::_employees;
-};
-
 bool FileIoUtils::addEmployee(Employee *employee){
     
     ofstream fstream_ob;
@@ -34,20 +27,7 @@ bool FileIoUtils::addEmployee(Employee *employee){
     fstream_ob.close();
     
     FileIoUtils::increaseSizeResource();
-    FileIoUtils::_employees.push_back(employee);
     return true;
-}
-
-Employee* FileIoUtils::findEmployeeById(const string &id)
-{
-    list<Employee *>::const_iterator it;
-    for (it = _employees.begin(); it != _employees.end(); it++) {
-        if ((*it)->id() ==  id ) {
-            return *it;
-        }
-    }
-    
-    return nullptr;
 }
 
 int FileIoUtils::increaseSizeResource()
@@ -77,25 +57,22 @@ int FileIoUtils::getSizeofResource()
     return size;
 }
 
-void FileIoUtils::refeshData()
+void FileIoUtils::loadAllEmployee(list<Employee> & employees)
 {
-    
     int size = FileIoUtils::getSizeofResource();
     if(size == 0){
         return;
     }
-    Employee employees[size];
+    Employee ems[size];
     
     ifstream ifstream_ob;
     ifstream_ob.open(FileIoUtils::_resourceFile.c_str(), ios::in);
-    ifstream_ob.read( (char *) & employees, sizeof(employees));
-        ifstream_ob.close();
-    
-    FileIoUtils::_employees.clear();
+    ifstream_ob.read( (char *) & ems, sizeof(ems));
+    ifstream_ob.close();
     
     for(int i = 0; i < size; i++)
     {
-        Employee *em = new Employee(employees[i].id(), employees[i].name(), employees[i].dateOfBirth(), employees[i].address(), employees[i].department());
-        FileIoUtils::_employees.push_back(em);
+        Employee *em = new Employee(ems[i].id(), ems[i].name(), ems[i].dateOfBirth(), ems[i].address(), ems[i].department());
+        employees.push_back(*em);
     }
 }

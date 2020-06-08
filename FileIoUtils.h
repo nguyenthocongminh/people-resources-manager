@@ -21,15 +21,12 @@ class FileIoUtils {
 private:
     static string _resourceFile;
     static string _sizeOfResourceFile;
-    static list<Employee *> _employees;
     
 public:
     static int getSizeofResource();
     static int increaseSizeResource();
-    static const list<Employee *> listEmployee();
     static bool addEmployee(Employee *employee);
-    static Employee * findEmployeeById(const string &id);
-    static void refeshData();
+    static void loadAllEmployee(list<Employee> & employees);
 };
 
 #endif /* FileIoUtils_hpp */
