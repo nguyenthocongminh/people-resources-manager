@@ -29,6 +29,7 @@ public:
     static const list<Employee *> listEmployee();
     static bool addEmployee(Employee *employee);
     static Employee * findEmployeeById(const string &id);
+    static void readDataFormCSV(const string &filePath, bool printResult = false);
     static void refeshData();
 };
 

@@ -14,6 +14,7 @@
 
 #include "Employee.h"
 #include "FileIoUtils.h"
+#include "ValidateUtils.h"
 
 using namespace std;
 
@@ -79,6 +80,36 @@ int FileIoUtils::getSizeofResource()
     
     ifstream_size >> size;
     return size;
+}
+
+void FileIoUtils::readDataFormCSV(const string &filePath, bool printResult) {
+    string row[5];
+
+    ifstream ifstream_ob;
+    ifstream_ob.open(filePath, ios::in);
+    string line, word;
+    while (ifstream_ob >> line) {
+        stringstream s(line);
+        int i=0;
+        while (getline(s, word, ',')) {
+            row[i++] = word;
+        }
+        Employee *em = new Employee(row[0], row[1], row[2], row[3], row[4]);
+        list<string> validate = ValidateUtils::validateEmployee(*em);
+        if(validate.empty()){
+            FileIoUtils::addEmployee(em);
+            if (printResult) {
+                cout << "\n*******\n";
+                cout << row[0] << ": Success\n";
+                cout << "\n*******\n";
+            }
+        } else {
+            if (printResult) {
+                ValidateUtils::printValid(validate);
+            }
+        }
+    }
+    ifstream_ob.close();
 }
 
 void FileIoUtils::refeshData()
