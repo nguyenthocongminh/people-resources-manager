@@ -53,7 +53,7 @@ const list<string> ValidateUtils::validateEmployee(Employee &em)
     return validate;
 }
 
-const void ValidateUtils::printValid(list<string> & valid)
+void ValidateUtils::printValid(list<string> & valid)
 {
     cout << "\n*******\n";
     for(auto const& i : valid)
