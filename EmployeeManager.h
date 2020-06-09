@@ -29,6 +29,7 @@ public:
     void findEmployeeById();
     void printEmployees();
     void printEmployee(Employee employee);
+    void importDataEmployeeCSV();
 };
 
 #endif /* EmployeeManager_hpp */

@@ -60,7 +60,8 @@ void startApplication(){
                 EmployeeManager::instance()->printEmployees();
                 break;
             case 4:
-                cout << "Import csv: method has not support";
+                cout << "Import csv:\n";
+                EmployeeManager::instance()->importDataEmployeeCSV();
                 break;
             case 5:
                 cout << "Diem danh: method has not support";

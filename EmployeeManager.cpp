@@ -96,3 +96,13 @@ void EmployeeManager::printEmployees()
         (*it)->printInfo();
     }
 }
+
+void EmployeeManager::importDataEmployeeCSV() {
+    cin.get();
+    string filePath;
+    cout << "Nhap duong dan den file CSV: ";
+    getline(cin, filePath);
+    FileIoUtils::readDataFormCSV(filePath, true);
+    cout << "Nhan Enter de tiep tuc\n";
+    cin.get();
+}
