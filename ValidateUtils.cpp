@@ -89,8 +89,6 @@ bool ValidateUtils::validateDate(const string &date) {
     istringstream(list[1]) >> month;
     istringstream(list[2]) >> year;
 
-    cout << day << " " << month << " " << year << endl;
-
     if (day < 1 || day > 31 || month < 1 || month > 12) {
         return false;
     }
