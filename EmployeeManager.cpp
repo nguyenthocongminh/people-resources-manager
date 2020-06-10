@@ -146,9 +146,15 @@ void EmployeeManager::addCheckPoint()
     
     // TODO: cin date, value
     // Validate
-    CheckPoint *cp = new CheckPoint("", "", ""); // TODO
-    FileIoUtils::addCheckPoint(*cp);
-    
+    string date, status;
+    cout << "Nhap ngay diem danh: ", cin >> date;
+    cout << "Nhap trang thai: ", cin >> status;
+    if (ValidateUtils::validateDate(date)) {
+        CheckPoint *cp = new CheckPoint(employeeId, date, status); // TODO
+        FileIoUtils::addCheckPoint(*cp);
+    } else {
+        cout << "Sai dinh dang ngay" << endl;
+    }
 }
 void EmployeeManager::refeshData()
 {
