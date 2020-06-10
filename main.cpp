@@ -14,6 +14,7 @@
 using namespace std;
 
 void startApplication();
+void wait();
 
 int main()
 {
@@ -53,20 +54,27 @@ void startApplication(){
                 _CLEAR;
                 cout << "Nhap thong tin nhan vien\n";
                 EmployeeManager::instance()->insertEmployee();
+                wait();
                 break;
             case 2:
                 _CLEAR;
                 cout << "Tim thong tin nhan vien\n";
                 EmployeeManager::instance()->findEmployeeById();
+                cin.ignore(1);
+                wait();
                 break;
             case 3:
                 _CLEAR;
                 cout << "Danh sach nhan vien:\n";
                 EmployeeManager::instance()->printEmployees();
+                cin.ignore(1);
+                wait();
                 break;
             case 4:
                 _CLEAR;
-                cout << "Import csv: method has not support";
+//                cout << "Import csv: method has not support";
+                EmployeeManager::instance()->importCsv();
+                wait();
                 break;
             case 5:
                 _CLEAR;
@@ -82,4 +90,10 @@ void startApplication(){
         }
         
     }
+}
+
+void wait()
+{
+    cout<<"-------------------------\nNhan Enter de tiep tuc ......\n"<<endl;
+    cin.get();
 }

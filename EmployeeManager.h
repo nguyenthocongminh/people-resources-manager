@@ -33,6 +33,7 @@ public:
     void findEmployeeById();
     void printEmployees();
     void refeshData();
+    void importCsv();
 };
 
 #endif /* EmployeeManager_hpp */

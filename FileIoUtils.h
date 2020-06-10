@@ -20,13 +20,12 @@ class FileIoUtils {
     
 private:
     static string _resourceFile;
-    static string _sizeOfResourceFile;
     
 public:
-    static int getSizeofResource();
-    static int increaseSizeResource();
     static bool addEmployee(Employee *employee);
     static void loadAllEmployee(list<Employee> & employees);
+    static list<Employee> & readEmployeeFromCsv(string & path);
+    static bool checkExist(string & path);
 };
 
 #endif /* FileIoUtils_hpp */

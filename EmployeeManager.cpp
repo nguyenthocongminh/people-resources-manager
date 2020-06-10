@@ -66,8 +66,6 @@ void EmployeeManager::insertEmployee()
     }
     
     ValidateUtils::printValid(validate);
-    cout << "Nhan Enter de tiep tuc\n";
-    cin.get();
 }
 
 void EmployeeManager::findEmployeeById()
@@ -98,6 +96,26 @@ void EmployeeManager::printEmployees()
     {
         it->printInfo();
     }
+}
+
+
+void EmployeeManager::importCsv()
+{
+    cin.get();
+    cout << "Nhap file import: " << endl;
+    string path;
+    getline(cin, path);
+    if(!FileIoUtils::checkExist(path)){
+        cout << "File khong ton tai !";
+        return;
+    }
+    list<Employee> employees = FileIoUtils::readEmployeeFromCsv(path);
+    list<Employee>::const_iterator it;
+    for (it = employees.begin(); it != employees.end(); it++) {
+        
+        it->printInfo();
+    }
+    cout << "=======\nTong so nhan vien import: " << employees.size() << endl;
 }
 
 void EmployeeManager::refeshData()
