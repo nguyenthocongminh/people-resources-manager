@@ -99,12 +99,12 @@ list<Employee> & FileIoUtils::readEmployeeFromCsv(string &path)
     return result;
 }
 
-void addCheckPoint(const CheckPoint & checkpoint)
+void FileIoUtils::addCheckPoint(const CheckPoint & checkpoint)
 {
     string fileName = FileIoUtils::genCheckpointFileName(checkpoint.employeeId());
     // TODO: append checkpoit to fileName
 }
-const list<CheckPoint> & loadCheckPoint(const string & employeeId)
+const list<CheckPoint> & FileIoUtils::loadCheckPoint(const string & employeeId)
 {
     static list<CheckPoint> checkpoits;
     
@@ -114,7 +114,7 @@ const list<CheckPoint> & loadCheckPoint(const string & employeeId)
     return checkpoits;
 }
 
-const string genCheckpointFileName(const string & employeeId)
+const string FileIoUtils::genCheckpointFileName(const string & employeeId)
 {
     string fileName = "checkpoint-" + employeeId + ".csv";
     return fileName;
