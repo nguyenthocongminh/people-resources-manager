@@ -10,6 +10,7 @@
 #define EmployeeManager_hpp
 #include <stdio.h>
 #include <string>
+#include <list>
 using namespace std;
 
 class Employee;
@@ -22,14 +23,18 @@ private:
 private:
     EmployeeManager();
     
+private:
+    list<Employee> _employees;
+    
 public:
     static EmployeeManager *instance();
     
     void insertEmployee();
     void findEmployeeById();
     void printEmployees();
-    void printEmployee(Employee employee);
-    void importDataEmployeeCSV();
+    void refeshData();
+    void importCsv();
+    void addCheckPoint();
 };
 
 #endif /* EmployeeManager_hpp */

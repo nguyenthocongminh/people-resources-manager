@@ -6,7 +6,6 @@ using namespace std;
 
 
 class Employee {
-    friend class EmployeeBuilder;
 
 private:
     string _id;

@@ -12,25 +12,27 @@
 #include <string>
 #include <regex>
 #include <iostream>
+#include "EmployeeManager.h"
 
 using namespace std;
 
-const list<string> ValidateUtils::validateEmployee(Employee &em)
+const list<string> ValidateUtils::validateEmployee(const Employee &em, const list<Employee> & currentEms)
 {
     list<string> validate;
-
+    
     if (!em.id().empty()) {
-        Employee *oldEm = FileIoUtils::findEmployeeById(em.id());
-
-        if(oldEm != nullptr) {
-            string errorId = "Trung id : " + em.id();
-            validate.push_back(errorId);
+        list<Employee>::const_iterator it;
+        for (it = currentEms.begin(); it != currentEms.end(); it++) {
+            if (it->id() == em.id()) {
+                string errorId = "Trung id : " + em.id();
+                validate.push_back(errorId);
+            }
         }
     } else {
         string errorId = "ID khong duoc de trong";
         validate.push_back(errorId);
     }
-
+    
     if (em.name().empty()) {
         string errorName = "Ten khong duoc de trong";
         validate.push_back(errorName);
@@ -61,4 +63,13 @@ void ValidateUtils::printValid(list<string> & valid)
         cout << i << "\n";
     }
     cout << "\n*******\n";
+}
+
+const void ValidateUtils::print(list<string> & listStr)
+{
+
+    for(auto const& i : listStr)
+    {
+        cout << i << "\n";
+    }
 }

@@ -3,16 +3,18 @@
 #define _CLEAR system("cls")
 #define _SLEEP(n) Sleep(n)
 #endif
-#if defined(unix) || defined(__unix__) || defined(__unix)
+#if defined(unix) || defined(__unix__) || defined(__unix) || __APPLE__
 #include <unistd.h> // Enable for mac, linux
 #define _CLEAR system("clear")
 #define _SLEEP(n) sleep(n)
 #endif
+
 #include <iostream>
 #include "EmployeeManager.h"
 using namespace std;
 
 void startApplication();
+void wait();
 
 int main()
 {
@@ -22,6 +24,7 @@ int main()
 
 void startApplication(){
     while(true){
+        
         // Options to choose an action
         cout << "\n\t1:   Nhap thong tin nhan vien";
         cout << "\n\t------------------------------------------------";
@@ -39,34 +42,46 @@ void startApplication(){
         
         int choice;
         cin >> choice;
-        
         _CLEAR;
-
+        
         switch (choice) {
             case 0:
+                _CLEAR;
                 cout<<"\n\nQUIT \n\n";
                 _SLEEP(1);
                 return;
             case 1:
+                _CLEAR;
                 cout << "Nhap thong tin nhan vien\n";
                 EmployeeManager::instance()->insertEmployee();
+                wait();
                 break;
             case 2:
+                _CLEAR;
                 cout << "Tim thong tin nhan vien\n";
                 EmployeeManager::instance()->findEmployeeById();
+                cin.ignore(1);
+                wait();
                 break;
             case 3:
+                _CLEAR;
                 cout << "Danh sach nhan vien:\n";
                 EmployeeManager::instance()->printEmployees();
+                cin.ignore(1);
+                wait();
                 break;
             case 4:
-                cout << "Import csv:\n";
-                EmployeeManager::instance()->importDataEmployeeCSV();
+                _CLEAR;
+                EmployeeManager::instance()->importCsv();
+                wait();
                 break;
             case 5:
-                cout << "Diem danh: method has not support";
+                _CLEAR;
+                EmployeeManager::instance()->addCheckPoint();
+                wait();
                 break;
             case 6:
+                _CLEAR;
                 cout << "Danh sach diem danh: method has not support";
                 break;
             default:
@@ -75,4 +90,10 @@ void startApplication(){
         }
         
     }
+}
+
+void wait()
+{
+    cout<<"-------------------------\nNhan Enter de tiep tuc ......\n"<<endl;
+    cin.get();
 }
