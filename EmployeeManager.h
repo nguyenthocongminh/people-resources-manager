@@ -34,6 +34,7 @@ public:
     void printEmployees();
     void refeshData();
     void importCsv();
+    void addCheckPoint();
 };
 
 #endif /* EmployeeManager_hpp */

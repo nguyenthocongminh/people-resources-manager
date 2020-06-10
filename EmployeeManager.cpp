@@ -12,6 +12,7 @@
 #include "EmployeeManager.h"
 #include "FileIoUtils.h"
 #include "ValidateUtils.h"
+#include "CheckPoint.h"
 
 using namespace std;
 
@@ -78,6 +79,7 @@ void EmployeeManager::findEmployeeById()
     for (it = _employees.begin(); it != _employees.end(); it++) {
         if (it->id() ==  id ) {
             it->printInfo();
+            // TODO: get checkpoint and print here
             return;
         }
     }
@@ -133,6 +135,21 @@ void EmployeeManager::importCsv()
     }
 }
 
+void EmployeeManager::addCheckPoint()
+{
+    string employeeId;
+    cout << "\nNhap id nhan vien: ";
+    cin >> employeeId;
+    
+    list<CheckPoint> checkpoints = FileIoUtils::loadCheckPoint(employeeId);
+    //TODO: check/handle exist
+    
+    // TODO: cin date, value
+    // Validate
+    CheckPoint *cp = new CheckPoint("", "", ""); // TODO
+    FileIoUtils::addCheckPoint(*cp);
+    
+}
 void EmployeeManager::refeshData()
 {
     _employees.clear();

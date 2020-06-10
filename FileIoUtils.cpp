@@ -14,10 +14,10 @@
 
 #include "Employee.h"
 #include "FileIoUtils.h"
-
+#include "CheckPoint.h"
 using namespace std;
 
-string FileIoUtils::_resourceFile = "./employees.txt";
+string FileIoUtils::_resourceFile = "employees.txt";
 
 void FileIoUtils::addEmployee(Employee *employee){
     
@@ -97,6 +97,27 @@ list<Employee> & FileIoUtils::readEmployeeFromCsv(string &path)
     result.pop_front();
     fin.close();
     return result;
+}
+
+void addCheckPoint(const CheckPoint & checkpoint)
+{
+    string fileName = FileIoUtils::genCheckpointFileName(checkpoint.employeeId());
+    // TODO: append checkpoit to fileName
+}
+const list<CheckPoint> & loadCheckPoint(const string & employeeId)
+{
+    static list<CheckPoint> checkpoits;
+    
+    string fileName = FileIoUtils::genCheckpointFileName(employeeId);
+    // TODO: get checkpoit from fileName
+    
+    return checkpoits;
+}
+
+const string genCheckpointFileName(const string & employeeId)
+{
+    string fileName = "checkpoint-" + employeeId + ".csv";
+    return fileName;
 }
 
 bool FileIoUtils::checkExist(string &path)

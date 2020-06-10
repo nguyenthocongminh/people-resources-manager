@@ -72,13 +72,13 @@ void startApplication(){
                 break;
             case 4:
                 _CLEAR;
-//                cout << "Import csv: method has not support";
                 EmployeeManager::instance()->importCsv();
                 wait();
                 break;
             case 5:
                 _CLEAR;
-                cout << "Diem danh: method has not support";
+                EmployeeManager::instance()->addCheckPoint();
+                wait();
                 break;
             case 6:
                 _CLEAR;
