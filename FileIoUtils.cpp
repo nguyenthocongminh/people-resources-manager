@@ -11,6 +11,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <cstring>
 
 #include "Employee.h"
 #include "FileIoUtils.h"
@@ -37,7 +38,7 @@ bool FileIoUtils::addEmployee(Employee *employee){
                << employee->address() << ","
                << employee->department() << endl;
     fstream_ob.close();
-    
+
     FileIoUtils::increaseSizeResource();
     FileIoUtils::_employees.push_back(employee);
     return true;
@@ -51,21 +52,21 @@ Employee* FileIoUtils::findEmployeeById(const string &id)
             return *it;
         }
     }
-    
+
     return nullptr;
 }
 
 int FileIoUtils::increaseSizeResource()
 {
-  
+
     int size = FileIoUtils::getSizeofResource();
     size += 1;
-    
+
     ofstream fstream_ob;
     fstream_ob.open(FileIoUtils::_sizeOfResourceFile.c_str(), ios::trunc);
     fstream_ob << size;
     fstream_ob.close();
-    
+
     return size;
 }
 
@@ -77,7 +78,7 @@ int FileIoUtils::getSizeofResource()
     if(!ifstream_size.is_open()){
         return 0;
     }
-    
+
     ifstream_size >> size;
     return size;
 }
@@ -87,33 +88,39 @@ void FileIoUtils::readDataFormCSV(const string &filePath, bool printResult) {
 
     ifstream ifstream_ob;
     ifstream_ob.open(filePath, ios::in);
-    string line, word;
-    while (ifstream_ob >> line) {
-        stringstream s(line);
-        int i=0;
-        while (getline(s, word, ',')) {
-            row[i++] = word;
-        }
-        Employee *em = new Employee(row[0], row[1], row[2], row[3], row[4]);
-        list<string> validate = ValidateUtils::validateEmployee(*em);
-        if(validate.empty()){
-            FileIoUtils::addEmployee(em);
-            if (printResult) {
-                cout << "\n*******\n";
-                cout << row[0] << ": Success\n";
-                cout << "\n*******\n";
+    if (ifstream_ob.is_open()) {
+        string line, word;
+        while (ifstream_ob >> line) {
+            stringstream s(line);
+            int i=0;
+            while (getline(s, word, ',')) {
+                row[i++] = word;
             }
-        } else {
-            if (printResult) {
-                ValidateUtils::printValid(validate);
+            Employee *em = new Employee(row[0], row[1], row[2], row[3], row[4]);
+            list<string> validate = ValidateUtils::validateEmployee(*em);
+            if(validate.empty()){
+                FileIoUtils::addEmployee(em);
+                if (printResult) {
+                    cout << "\n*******\n";
+                    cout << row[0] << ": Success";
+                    cout << "\n*******\n";
+                }
+            } else {
+                if (printResult) {
+                    ValidateUtils::printValid(validate);
+                }
             }
         }
+    } else {
+        cout << "\n*******\n";
+        cout << "Error: " << strerror(errno);
+        cout << "\n*******\n\n";
     }
     ifstream_ob.close();
 }
 
 void FileIoUtils::refeshData()
-{  
+{
     FileIoUtils::_employees.clear();
 
     string row[5];
