@@ -22,7 +22,8 @@ private:
     static string _resourceFile;
     
 public:
-    static bool addEmployee(Employee *employee);
+    static void addEmployee(Employee *employee);
+    static void addListEmployees(list<Employee> & employees);
     static void loadAllEmployee(list<Employee> & employees);
     static list<Employee> & readEmployeeFromCsv(string & path);
     static bool checkExist(string & path);

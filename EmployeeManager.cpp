@@ -106,16 +106,31 @@ void EmployeeManager::importCsv()
     string path;
     getline(cin, path);
     if(!FileIoUtils::checkExist(path)){
-        cout << "File khong ton tai !";
+        cout << "File khong ton tai !\n";
         return;
     }
     list<Employee> employees = FileIoUtils::readEmployeeFromCsv(path);
+    
+    bool flagErr = false;
+    
     list<Employee>::const_iterator it;
     for (it = employees.begin(); it != employees.end(); it++) {
+        list<string> validate = ValidateUtils::validateEmployee(*it, _employees);
+        if(!validate.empty()){
+            flagErr = true;
+            cout << "------------------\n";
+            cout << "Co loi tai dong: ";
+            it -> printInfo();
+            ValidateUtils::print(validate);
+            cout << "------------------\n";
+        }
         
-        it->printInfo();
     }
-    cout << "=======\nTong so nhan vien import: " << employees.size() << endl;
+    if(!flagErr){
+        FileIoUtils::addListEmployees(employees);
+        this->_employees.insert(_employees.end(), employees.begin(), employees.end());
+        cout << "=======\nTong so nhan vien import thanh cong: " << employees.size() << endl;
+    }
 }
 
 void EmployeeManager::refeshData()

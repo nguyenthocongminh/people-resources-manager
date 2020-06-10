@@ -19,7 +19,7 @@ using namespace std;
 
 string FileIoUtils::_resourceFile = "./employees.txt";
 
-bool FileIoUtils::addEmployee(Employee *employee){
+void FileIoUtils::addEmployee(Employee *employee){
     
     ofstream fstream_ob;
     fstream_ob.open(FileIoUtils::_resourceFile.c_str(), ios::app);
@@ -29,7 +29,25 @@ bool FileIoUtils::addEmployee(Employee *employee){
                << employee->address() << ","
                << employee->department() << endl;
     fstream_ob.close();
-    return true;
+}
+
+void FileIoUtils::addListEmployees(list<Employee> &employees)
+{
+    
+    ofstream fstream_ob;
+    fstream_ob.open(FileIoUtils::_resourceFile.c_str(), ios::app);
+    list<Employee>::const_iterator it;
+    for (it = employees.begin(); it != employees.end(); it++) {
+        fstream_ob
+        << it->id() << ","
+        << it->name() << ","
+        << it->dateOfBirth() << ","
+        << it->address() << ","
+        << it->department()
+        << endl;
+    }
+
+    fstream_ob.close();
 }
 
 void FileIoUtils::loadAllEmployee(list<Employee> & employees)

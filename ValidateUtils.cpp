@@ -16,7 +16,7 @@
 
 using namespace std;
 
-const list<string> ValidateUtils::validateEmployee(Employee &em, const list<Employee> & currentEms)
+const list<string> ValidateUtils::validateEmployee(const Employee &em, const list<Employee> & currentEms)
 {
     list<string> validate;
     
@@ -63,4 +63,13 @@ const void ValidateUtils::printValid(list<string> & valid)
         cout << i << "\n";
     }
     cout << "\n*******\n";
+}
+
+const void ValidateUtils::print(list<string> & listStr)
+{
+
+    for(auto const& i : listStr)
+    {
+        cout << i << "\n";
+    }
 }
