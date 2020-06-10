@@ -3,7 +3,7 @@
 #define _CLEAR system("cls")
 #define _SLEEP(n) Sleep(n)
 #endif
-#if defined(unix) || defined(__unix__) || defined(__unix) || __APPLE__
+#if defined(unix) || defined(__unix__) || defined(__unix) || defined(__APPLE__)
 #include <unistd.h> // Enable for mac, linux
 #define _CLEAR system("clear")
 #define _SLEEP(n) sleep(n)

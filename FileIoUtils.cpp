@@ -9,7 +9,7 @@
 #include <list>
 #include <string>
 #include <iostream>
-#include<fstream>
+#include <fstream>
 #include <sstream>
 
 #include "Employee.h"
@@ -103,15 +103,38 @@ void FileIoUtils::addCheckPoint(const CheckPoint & checkpoint)
 {
     string fileName = FileIoUtils::genCheckpointFileName(checkpoint.employeeId());
     // TODO: append checkpoit to fileName
+    ofstream fout;
+    fout.open(fileName, ios::app);
+    if (fout.is_open()) {
+        fout << checkpoint.date() << "," << checkpoint.value() << endl;
+    }
+    fout.close();
 }
 const list<CheckPoint> & FileIoUtils::loadCheckPoint(const string & employeeId)
 {
-    static list<CheckPoint> checkpoits;
+    static list<CheckPoint> checkpoints;
     
     string fileName = FileIoUtils::genCheckpointFileName(employeeId);
     // TODO: get checkpoit from fileName
+    ifstream fin;
+    fin.open(fileName, ios::in);
+    if (fin.is_open()) {
+        string line, word;
+
+        while (getline(fin, line)) {
+            stringstream s(line);
+            int i = 0;
+            string row[2];
+            while (getline(s, word, ',')) {
+                row[i++] = word;
+            }
+            CheckPoint *cp = new CheckPoint(employeeId, row[0], row[1]);
+            checkpoints.push_back(*cp);
+        }
+    }
+    fin.close();
     
-    return checkpoits;
+    return checkpoints;
 }
 
 const string FileIoUtils::genCheckpointFileName(const string & employeeId)
