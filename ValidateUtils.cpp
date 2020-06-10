@@ -65,7 +65,7 @@ void ValidateUtils::printValid(list<string> & valid)
     cout << "\n*******\n";
 }
 
-const void ValidateUtils::print(list<string> & listStr)
+void ValidateUtils::print(list<string> & listStr)
 {
 
     for(auto const& i : listStr)

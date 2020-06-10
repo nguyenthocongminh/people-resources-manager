@@ -21,7 +21,7 @@ class ValidateUtils
 {
 public:
     static const list<string> validateEmployee(const Employee &em, const list<Employee> & currentEms);
-    static const void printValid(list<string> & valid);
-    static const void print(list<string> & listStr);
+    static void printValid(list<string> & valid);
+    static void print(list<string> & listStr);
 };
 #endif /* ValidateUtils_hpp */
