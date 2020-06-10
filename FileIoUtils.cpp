@@ -9,7 +9,7 @@
 #include <list>
 #include <string>
 #include <iostream>
-#include<fstream>
+#include <fstream>
 #include <sstream>
 
 #include "Employee.h"
