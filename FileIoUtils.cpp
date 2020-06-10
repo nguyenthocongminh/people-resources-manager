@@ -93,7 +93,7 @@ void FileIoUtils::readDataFormCSV(const string &filePath, bool printResult) {
         while (ifstream_ob >> line) {
             stringstream s(line);
             int i=0;
-            while (getline(s, word, ',')) {
+            while (getline(ifstream_ob, line)) {
                 row[i++] = word;
             }
             Employee *em = new Employee(row[0], row[1], row[2], row[3], row[4]);
