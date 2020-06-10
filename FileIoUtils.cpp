@@ -128,7 +128,7 @@ void FileIoUtils::refeshData()
     ifstream ifstream_ob;
     ifstream_ob.open(FileIoUtils::_resourceFile.c_str(), ios::in);
     string line, word;
-    while (ifstream_ob >> line) {
+    while (getline(ifstream_ob, line)) {
         stringstream s(line);
         int i=0;
         while (getline(s, word, ',')) {
