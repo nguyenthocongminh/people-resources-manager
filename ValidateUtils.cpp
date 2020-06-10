@@ -100,11 +100,14 @@ bool ValidateUtils::validateDate(const string &date) {
     }
     time_t t = time(0);
     struct tm * timeStruct = localtime(&t);
-    if (year < 1900 || (year > timeStruct->tm_year)) {
+    int currentY = timeStruct->tm_year + 1900;
+    int currentM = timeStruct->tm_mon + 1;
+    int currentD = timeStruct->tm_mday;
+    if (year < 1900 || year > currentY) {
         return false;
     }
-    if (year == timeStruct->tm_year) {
-        if (month > (timeStruct->tm_mon + 1) || (month == (timeStruct->tm_mon + 1) && day > (timeStruct->tm_mday))) {
+    if (year == currentY) {
+        if (month > currentM || (month == currentM && day > currentD)) {
             return false;
         }
     }
