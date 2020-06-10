@@ -90,10 +90,10 @@ void FileIoUtils::readDataFormCSV(const string &filePath, bool printResult) {
     ifstream_ob.open(filePath, ios::in);
     if (ifstream_ob.is_open()) {
         string line, word;
-        while (ifstream_ob >> line) {
+        while (getline(ifstream_ob, line)) {
             stringstream s(line);
             int i=0;
-            while (getline(ifstream_ob, line)) {
+            while (getline(s, word, ',')) {
                 row[i++] = word;
             }
             Employee *em = new Employee(row[0], row[1], row[2], row[3], row[4]);
