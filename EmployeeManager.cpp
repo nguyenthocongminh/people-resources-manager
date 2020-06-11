@@ -86,7 +86,7 @@ void EmployeeManager::findEmployeeById()
             time_t now = time(0);
             tm *ltm = localtime(&now);
             
-            list<CheckPoint> checkpoints = this->filterByMonth(allCheckpoints, 1 + ltm->tm_mon);
+            list<CheckPoint> checkpoints = this->filterByMonth(allCheckpoints, 1 + ltm->tm_mon, ltm->tm_year);
             
             this->printCheckPointSortByDay(checkpoints);
             return;
@@ -150,35 +150,50 @@ void EmployeeManager::addCheckPoint()
     cout << "\nNhap id nhan vien: ";
     cin >> employeeId;
     
-    list<CheckPoint> checkpoints = FileIoUtils::loadCheckPoint(employeeId);
-    //TODO: check/handle exist -> update checkpoints
-    // TODO: validate value
-    
     string date, status;
-    cout << "Nhap ngay diem danh (0 de tro lai menu): ", cin >> date;
+    cout << "Nhap ngay diem danh (0 de tro lai menu): ";
+    cin >> date;
     while (date != "0" && !ValidateUtils::validateDate(date)) {
-        cout << "Ngay sai dinh dang, nhap lai: ", cin >> date;
+        cout << "Ngay sai dinh dang, nhap lai: ";
+        cin >> date;
     }
     if (date == "0") {
         return;
     }
-    cout << "Nhap trang thai (0 de tro lai menu): ", cin >> status;
+    
+    cout << "Nhap trang thai (0 de tro lai menu): ";
+    cin >> status;
     while (status != "0" && !ValidateUtils::validateStatus(status)) {
-        cout << "Trang thai sai dinh dang, nhap lai: ", cin >> status;
+        cout << "Trang thai sai dinh dang, nhap lai: ";
+        cin >> status;
     }
     if (status == "0") {
         return;
     }
-
+    
     CheckPoint *cp = new CheckPoint(employeeId, date, status);
+    
+    // Rewrite when exist check point
+    list<CheckPoint> checkpoints = FileIoUtils::loadCheckPoint(employeeId);
+    list<CheckPoint>::const_iterator itcp;
+    for (itcp = checkpoints.begin(); itcp != checkpoints.end(); itcp++) {
+        if(itcp->employeeId().compare(employeeId) == 0
+           && itcp->date().compare(date) == 0){
+            checkpoints.erase(itcp);
+            checkpoints.push_back(*cp);
+            break;
+        }
+    }
+    
+    this->printCheckPointSortByDay(checkpoints);
     FileIoUtils::addCheckPoint(*cp);
 }
 
-list<CheckPoint> & EmployeeManager::filterByMonth(list<CheckPoint> & checkpoints, int month)
+list<CheckPoint> & EmployeeManager::filterByMonth(list<CheckPoint> & checkpoints, int month, int year)
 {
     static list<CheckPoint> result;
     result.insert(result.end(), checkpoints.begin(), checkpoints.end()); // TODO: filter by month here
-    return result;
+    return checkpoints;
 }
 
 void EmployeeManager::printCheckPointSortByDay(list<CheckPoint> &checkpoints)

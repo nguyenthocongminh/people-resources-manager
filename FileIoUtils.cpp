@@ -76,6 +76,7 @@ list<Employee> & FileIoUtils::readEmployeeFromCsv(string &path)
     fin.open(path, ios::in);
 
     static list<Employee> result;
+    result.clear();
     
     if(!fin.is_open()) {
         return result;
@@ -112,7 +113,7 @@ void FileIoUtils::addCheckPoint(const CheckPoint & checkpoint)
 const list<CheckPoint> & FileIoUtils::loadCheckPoint(const string & employeeId)
 {
     static list<CheckPoint> checkpoints;
-    
+    checkpoints.clear();
     string fileName = FileIoUtils::genCheckpointFileName(employeeId);
     ifstream fin;
     fin.open(fileName, ios::in);
