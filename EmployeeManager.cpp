@@ -88,7 +88,7 @@ void EmployeeManager::findEmployeeById()
             time_t now = time(0);
             tm *ltm = localtime(&now);
             
-            list<CheckPoint> checkpoints = filterByMonth(allCheckpoints, 1 + ltm->tm_mon);
+            list<CheckPoint> checkpoints = filterByMonth(allCheckpoints, 1 + ltm->tm_mon, ltm->tm_year + 1900);
             
             printCheckPointSortByDay(checkpoints);
             return;
@@ -151,32 +151,51 @@ void EmployeeManager::addCheckPoint()
     string employeeId;
     cout << "\nNhap id nhan vien: ";
     cin >> employeeId;
-    
-    list<CheckPoint> checkpoints = FileIoUtils::loadCheckPoint(employeeId);
-    //TODO: check/handle exist -> update checkpoints
-    // TODO: validate value
-    
+
     string date, status;
-    cout << "Nhap ngay diem danh (0 de tro lai menu): ", cin >> date;
+    cout << "Nhap ngay diem danh (0 de tro lai menu): ";
+    cin >> date;
     while (date != "0" && !ValidateUtils::validateDate(date)) {
-        cout << "Ngay sai dinh dang, nhap lai: ", cin >> date;
+        cout << "Ngay sai dinh dang, nhap lai: ";
+        cin >> date;
     }
     if (date == "0") {
         return;
     }
-    cout << "Nhap trang thai (0 de tro lai menu): ", cin >> status;
+
+    cout << "Nhap trang thai (0 de tro lai menu): ";
+    cin >> status;
     while (status != "0" && !ValidateUtils::validateStatus(status)) {
-        cout << "Trang thai sai dinh dang, nhap lai: ", cin >> status;
+        cout << "Trang thai sai dinh dang, nhap lai: ";
+        cin >> status;
     }
     if (status == "0") {
         return;
     }
 
     CheckPoint *cp = new CheckPoint(employeeId, date, status);
+
+    list<CheckPoint> checkpoints = FileIoUtils::loadCheckPoint(employeeId);
+    list<CheckPoint>::const_iterator itcp;
+    for (itcp = checkpoints.begin(); itcp != checkpoints.end(); itcp++) {
+        if(itcp->employeeId().compare(employeeId) == 0
+           && itcp->date().compare(date) == 0){
+            string option = "Y";
+            cout << "Ngay nay da co thong tin, ban co muon cap nhat khong Y/N ?";
+            cin >> option;
+            if (option == "Y" || option == "y") {
+                checkpoints.erase(itcp);
+                checkpoints.push_back(*cp);
+                FileIoUtils::rewriteCheckPoint(employeeId, checkpoints);
+            }
+
+            return;
+        }
+    }
     FileIoUtils::addCheckPoint(*cp);
 }
 
-list<CheckPoint> EmployeeManager::filterByMonth(const list<CheckPoint> & checkpoints, int month)
+list<CheckPoint> EmployeeManager::filterByMonth(const list<CheckPoint> & checkpoints, int month, int year)
 {
     list<CheckPoint> result;
     list<CheckPoint>::const_iterator itcp;
@@ -188,9 +207,10 @@ list<CheckPoint> EmployeeManager::filterByMonth(const list<CheckPoint> & checkpo
         while (getline(s, tmp, '/') && i < 3) {
             list[i++] = tmp;
         }
-        int monthCP;
+        int monthCP, yearCP;
         istringstream(list[1]) >> monthCP;
-        if (month == monthCP) {
+        istringstream(list[2]) >> yearCP;
+        if (month == monthCP && year == yearCP) {
             result.push_back(*itcp);
         }
     }

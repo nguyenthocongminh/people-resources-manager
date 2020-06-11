@@ -38,7 +38,7 @@ public:
     void addCheckPoint();
     
 private:
-    list<CheckPoint> filterByMonth(const list<CheckPoint> & checkpoints, int month);
+    list<CheckPoint> filterByMonth(const list<CheckPoint> & checkpoints, int month, int year);
     void printCheckPointSortByDay(const list<CheckPoint> & checkpoints);
 };
 

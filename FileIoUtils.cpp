@@ -76,7 +76,8 @@ list<Employee> & FileIoUtils::readEmployeeFromCsv(string &path)
     fin.open(path, ios::in);
 
     static list<Employee> result;
-    
+    result.clear();
+
     if(!fin.is_open()) {
         return result;
     }
@@ -145,4 +146,19 @@ bool FileIoUtils::checkExist(string &path)
 {
     ifstream f(path.c_str());
     return f.good();
+}
+
+void FileIoUtils::rewriteCheckPoint(string & employeeId, list<CheckPoint> & checkPoints)
+{
+    string fileName = FileIoUtils::genCheckpointFileName(employeeId);
+    ofstream fstream_ob;
+    fstream_ob.open(fileName, ios::trunc);
+
+    if (fstream_ob.is_open()) {
+        list<CheckPoint>::const_iterator itcp;
+        for (itcp = checkPoints.begin(); itcp != checkPoints.end(); itcp++) {
+            fstream_ob << itcp->date() << "," << itcp->value() << endl;
+        }
+    }
+    fstream_ob.close();
 }
