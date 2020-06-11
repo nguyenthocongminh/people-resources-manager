@@ -155,16 +155,23 @@ void EmployeeManager::addCheckPoint()
     // TODO: validate value
     
     string date, status;
-    cout << "Nhap ngay diem danh: ";
-    cin >> date;
-    cout << "Nhap trang thai: ";
-    cin >> status;
-    if (ValidateUtils::validateDate(date)) {
-        CheckPoint *cp = new CheckPoint(employeeId, date, status);
-        FileIoUtils::addCheckPoint(*cp);
-    } else {
-        cout << "Sai dinh dang ngay" << endl;
+    cout << "Nhap ngay diem danh (0 de tro lai menu): ", cin >> date;
+    while (date != "0" && !ValidateUtils::validateDate(date)) {
+        cout << "Ngay sai dinh dang, nhap lai: ", cin >> date;
     }
+    if (date == "0") {
+        return;
+    }
+    cout << "Nhap trang thai (0 de tro lai menu): ", cin >> status;
+    while (status != "0" && !ValidateUtils::validateStatus(status)) {
+        cout << "Trang thai sai dinh dang, nhap lai: ", cin >> status;
+    }
+    if (status == "0") {
+        return;
+    }
+
+    CheckPoint *cp = new CheckPoint(employeeId, date, status);
+    FileIoUtils::addCheckPoint(*cp);
 }
 
 list<CheckPoint> & EmployeeManager::filterByMonth(list<CheckPoint> & checkpoints, int month)
