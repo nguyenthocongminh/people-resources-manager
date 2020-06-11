@@ -109,9 +109,9 @@ void FileIoUtils::addCheckPoint(const CheckPoint & checkpoint)
     }
     fout.close();
 }
-const list<CheckPoint> & FileIoUtils::loadCheckPoint(const string & employeeId)
+list<CheckPoint> FileIoUtils::loadCheckPoint(const string & employeeId)
 {
-    static list<CheckPoint> checkpoints;
+    list<CheckPoint> checkpoints;
     
     string fileName = FileIoUtils::genCheckpointFileName(employeeId);
     ifstream fin;
