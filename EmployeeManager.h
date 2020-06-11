@@ -14,6 +14,7 @@
 using namespace std;
 
 class Employee;
+class CheckPoint;
 
 class EmployeeManager
 {
@@ -35,6 +36,10 @@ public:
     void refeshData();
     void importCsv();
     void addCheckPoint();
+    
+private:
+    list<CheckPoint> & filterByMonth(list<CheckPoint> & checkpoints, int month);
+    void printCheckPointSortByDay(list<CheckPoint> & checkpoints);
 };
 
 #endif /* EmployeeManager_hpp */

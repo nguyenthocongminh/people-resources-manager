@@ -102,7 +102,6 @@ list<Employee> & FileIoUtils::readEmployeeFromCsv(string &path)
 void FileIoUtils::addCheckPoint(const CheckPoint & checkpoint)
 {
     string fileName = FileIoUtils::genCheckpointFileName(checkpoint.employeeId());
-    // TODO: append checkpoit to fileName
     ofstream fout;
     fout.open(fileName, ios::app);
     if (fout.is_open()) {
@@ -115,7 +114,6 @@ const list<CheckPoint> & FileIoUtils::loadCheckPoint(const string & employeeId)
     static list<CheckPoint> checkpoints;
     
     string fileName = FileIoUtils::genCheckpointFileName(employeeId);
-    // TODO: get checkpoit from fileName
     ifstream fin;
     fin.open(fileName, ios::in);
     if (fin.is_open()) {

@@ -8,6 +8,8 @@
 
 #include <string>
 #include <iostream>
+#include <ctime>
+
 #include "Employee.h"
 #include "EmployeeManager.h"
 #include "FileIoUtils.h"
@@ -79,7 +81,14 @@ void EmployeeManager::findEmployeeById()
     for (it = _employees.begin(); it != _employees.end(); it++) {
         if (it->id() ==  id ) {
             it->printInfo();
-            // TODO: get checkpoint and print here
+            
+            list<CheckPoint> allCheckpoints = FileIoUtils::loadCheckPoint(it->id());
+            time_t now = time(0);
+            tm *ltm = localtime(&now);
+            
+            list<CheckPoint> checkpoints = this->filterByMonth(allCheckpoints, 1 + ltm->tm_mon);
+            
+            this->printCheckPointSortByDay(checkpoints);
             return;
         }
     }
@@ -142,20 +151,38 @@ void EmployeeManager::addCheckPoint()
     cin >> employeeId;
     
     list<CheckPoint> checkpoints = FileIoUtils::loadCheckPoint(employeeId);
-    //TODO: check/handle exist
+    //TODO: check/handle exist -> update checkpoints
+    // TODO: validate value
     
-    // TODO: cin date, value
-    // Validate
     string date, status;
-    cout << "Nhap ngay diem danh: ", cin >> date;
-    cout << "Nhap trang thai: ", cin >> status;
+    cout << "Nhap ngay diem danh: ";
+    cin >> date;
+    cout << "Nhap trang thai: ";
+    cin >> status;
     if (ValidateUtils::validateDate(date)) {
-        CheckPoint *cp = new CheckPoint(employeeId, date, status); // TODO
+        CheckPoint *cp = new CheckPoint(employeeId, date, status);
         FileIoUtils::addCheckPoint(*cp);
     } else {
         cout << "Sai dinh dang ngay" << endl;
     }
 }
+
+list<CheckPoint> & EmployeeManager::filterByMonth(list<CheckPoint> & checkpoints, int month)
+{
+    static list<CheckPoint> result;
+    result.insert(result.end(), checkpoints.begin(), checkpoints.end()); // TODO: filter by month here
+    return result;
+}
+
+void EmployeeManager::printCheckPointSortByDay(list<CheckPoint> &checkpoints)
+{
+    // TODO: replace logic: print checkpoint date + value in sorted day
+    list<CheckPoint>::const_iterator itcp;
+    for (itcp = checkpoints.begin(); itcp != checkpoints.end(); itcp++) {
+        itcp->printValue();
+    }
+}
+
 void EmployeeManager::refeshData()
 {
     _employees.clear();
