@@ -217,9 +217,9 @@ list<CheckPoint> EmployeeManager::filterByMonth(const list<CheckPoint> & checkpo
     return result;
 }
 
-void EmployeeManager::printCheckPointSortByDay(const list<CheckPoint> &checkpoints)
+void EmployeeManager::printCheckPointSortByDay(list<CheckPoint> &checkpoints)
 {
-    // TODO: replace logic: print checkpoint date + value in sorted day
+    checkpoints.sort();
     list<CheckPoint>::const_iterator itcp;
     for (itcp = checkpoints.begin(); itcp != checkpoints.end(); itcp++) {
         itcp->printValue();
