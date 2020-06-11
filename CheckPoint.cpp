@@ -36,3 +36,7 @@ void CheckPoint::printInfo() const
 {
     cout << _employeeId << " - " << _date << " - " << value() << endl;
 }
+void CheckPoint::printValue() const
+{
+    cout << _date << " - " << value() << endl;
+}

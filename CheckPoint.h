@@ -35,6 +35,7 @@ public:
     const string &value() const;
     
     void printInfo() const;
+    void printValue() const;
 };
 
 #endif /* CheckPoint_hpp */
