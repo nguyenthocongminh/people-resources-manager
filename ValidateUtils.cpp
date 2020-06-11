@@ -117,3 +117,13 @@ bool ValidateUtils::validateDate(const string &date) {
     }
     return true;
 }
+
+bool ValidateUtils::validateStatus(const string &status) {
+    string validStatus[] = {"DL", "DLNN", "N", "NP"};
+    for (int i = 0; i < 4; i++) {
+        if (status == validStatus[i]) {
+            return true;
+        }
+    }
+    return false;
+}

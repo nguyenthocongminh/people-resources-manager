@@ -24,5 +24,6 @@ public:
     static void printValid(list<string> & valid);
     static void print(list<string> & listStr);
     static bool validateDate (const string &date);
+    static bool validateStatus(const string &status);
 };
 #endif /* ValidateUtils_hpp */
