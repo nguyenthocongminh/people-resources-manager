@@ -77,6 +77,10 @@ void ValidateUtils::print(list<string> & listStr)
 }
 
 bool ValidateUtils::validateDate(const string &date) {
+    if(!regex_match (date, regex("^([0-2][0-9]|(3)[0-1])(\\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}$"))) {
+        return false;
+    }
+
     stringstream s(date);
     string list[3];
     string tmp;
@@ -112,4 +116,14 @@ bool ValidateUtils::validateDate(const string &date) {
         }
     }
     return true;
+}
+
+bool ValidateUtils::validateStatus(const string &status) {
+    string validStatus[] = {"DL", "DLNN", "N", "NP"};
+    for (int i = 0; i < 4; i++) {
+        if (status == validStatus[i]) {
+            return true;
+        }
+    }
+    return false;
 }
