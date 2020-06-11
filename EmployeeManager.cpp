@@ -207,9 +207,10 @@ list<CheckPoint> EmployeeManager::filterByMonth(const list<CheckPoint> & checkpo
         while (getline(s, tmp, '/') && i < 3) {
             list[i++] = tmp;
         }
-        int monthCP;
+        int monthCP, yearCP;
         istringstream(list[1]) >> monthCP;
-        if (month == monthCP) {
+        istringstream(list[2]) >> yearCP;
+        if (month == monthCP && year == yearCP) {
             result.push_back(*itcp);
         }
     }
