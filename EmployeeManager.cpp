@@ -173,19 +173,23 @@ void EmployeeManager::addCheckPoint()
     
     CheckPoint *cp = new CheckPoint(employeeId, date, status);
     
-    // Rewrite when exist check point
     list<CheckPoint> checkpoints = FileIoUtils::loadCheckPoint(employeeId);
     list<CheckPoint>::const_iterator itcp;
     for (itcp = checkpoints.begin(); itcp != checkpoints.end(); itcp++) {
         if(itcp->employeeId().compare(employeeId) == 0
            && itcp->date().compare(date) == 0){
-            checkpoints.erase(itcp);
-            checkpoints.push_back(*cp);
-            break;
+            string option = "Y";
+            cout << "Ngay nay da co thong tin, ban co muon cap nhat khong Y/N ?";
+            cin >> option;
+            if (option == "Y" || option == "y") {
+                checkpoints.erase(itcp);
+                checkpoints.push_back(*cp);
+                FileIoUtils::rewriteCheckPoint(employeeId, checkpoints);
+            }
+
+            return;
         }
     }
-    
-    this->printCheckPointSortByDay(checkpoints);
     FileIoUtils::addCheckPoint(*cp);
 }
 
