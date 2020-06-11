@@ -20,7 +20,10 @@ class Employee;
 class ValidateUtils
 {
 public:
-    static const list<string> validateEmployee(Employee &em);
+    static const list<string> validateEmployee(const Employee &em, const list<Employee> & currentEms);
     static void printValid(list<string> & valid);
+    static void print(list<string> & listStr);
+    static bool validateDate (const string &date);
+    static bool validateStatus(const string &status);
 };
 #endif /* ValidateUtils_hpp */

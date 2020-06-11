@@ -4,6 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        CheckPoint.cpp \
         Employee.cpp \
         EmployeeManager.cpp \
         FileIoUtils.cpp \
@@ -11,6 +12,7 @@ SOURCES += \
         main.cpp
 
 HEADERS += \
+    CheckPoint.h \
     Employee.h \
     EmployeeManager.h \
     FileIoUtils.h \

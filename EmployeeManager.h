@@ -10,9 +10,11 @@
 #define EmployeeManager_hpp
 #include <stdio.h>
 #include <string>
+#include <list>
 using namespace std;
 
 class Employee;
+class CheckPoint;
 
 class EmployeeManager
 {
@@ -22,14 +24,22 @@ private:
 private:
     EmployeeManager();
     
+private:
+    list<Employee> _employees;
+    
 public:
     static EmployeeManager *instance();
     
     void insertEmployee();
     void findEmployeeById();
     void printEmployees();
-    void printEmployee(Employee employee);
-    void importDataEmployeeCSV();
+    void refeshData();
+    void importCsv();
+    void addCheckPoint();
+    
+private:
+    list<CheckPoint> & filterByMonth(list<CheckPoint> & checkpoints, int month);
+    void printCheckPointSortByDay(list<CheckPoint> & checkpoints);
 };
 
 #endif /* EmployeeManager_hpp */

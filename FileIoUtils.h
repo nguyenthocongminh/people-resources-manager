@@ -15,22 +15,21 @@
 using namespace std;
 
 class Employee;
+class CheckPoint;
 
 class FileIoUtils {
     
 private:
     static string _resourceFile;
-    static string _sizeOfResourceFile;
-    static list<Employee *> _employees;
-    
-public:
-    static int getSizeofResource();
-    static int increaseSizeResource();
-    static const list<Employee *> listEmployee();
-    static bool addEmployee(Employee *employee);
-    static Employee * findEmployeeById(const string &id);
-    static void readDataFormCSV(const string &filePath, bool printResult = false);
-    static void refeshData();
-};
 
+public:
+    static void addEmployee(Employee *employee);
+    static void addListEmployees(list<Employee> & employees);
+    static void loadAllEmployee(list<Employee> & employees);
+    static list<Employee> & readEmployeeFromCsv(string & path);
+    static bool checkExist(string & path);
+    static void addCheckPoint(const CheckPoint & checkpoint); // Write to a file, indentify by employee_id
+    static const list<CheckPoint> & loadCheckPoint(const string & employeeId); // Get checkpoit of a employee by employee_id
+    static const string genCheckpointFileName(const string & employeeId); // Specify checkpoint file by employeeId
+};
 #endif /* FileIoUtils_hpp */
