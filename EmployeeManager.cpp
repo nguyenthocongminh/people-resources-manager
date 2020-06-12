@@ -219,15 +219,18 @@ list<CheckPoint> EmployeeManager::filterByMonth(const list<CheckPoint> & checkpo
 
 void EmployeeManager::printCheckPointSortByDay(list<CheckPoint> &checkpoints, int month, int year)
 {
+    
     checkpoints.sort();
     int numberOfDays = getNumberOfDays(month, year);
     string dayOfMonth[numberOfDays];
     
     list<CheckPoint>::const_iterator itcp;
     
+    string monthStr = month >= 10 ? to_string(month) : "0" + to_string(month);
+    cout << "Diem danh thang " << monthStr + "/" + to_string(year) << ":\n";
+    
     for(int i = 1; i <= numberOfDays; i++){
         string dayStr = i >= 10 ? to_string(i) : "0" + to_string(i);
-        string monthStr = month >= 10 ? to_string(month) : "0" + to_string(month);
         string dateStr = dayStr + "/" + monthStr + "/" + to_string(year);
         
         cout << dateStr + ": ";
