@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <string>
+#include <sstream>
 using namespace std;
 
 
@@ -27,6 +28,8 @@ public:
                const string &_value);
     
     CheckPoint();
+
+    bool operator <(const CheckPoint & _checkpoint) const;
 
 public:
     

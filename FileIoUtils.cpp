@@ -77,7 +77,7 @@ list<Employee> & FileIoUtils::readEmployeeFromCsv(string &path)
 
     static list<Employee> result;
     result.clear();
-    
+
     if(!fin.is_open()) {
         return result;
     }
@@ -110,10 +110,10 @@ void FileIoUtils::addCheckPoint(const CheckPoint & checkpoint)
     }
     fout.close();
 }
-const list<CheckPoint> & FileIoUtils::loadCheckPoint(const string & employeeId)
+list<CheckPoint> FileIoUtils::loadCheckPoint(const string & employeeId)
 {
-    static list<CheckPoint> checkpoints;
-    checkpoints.clear();
+    list<CheckPoint> checkpoints;
+    
     string fileName = FileIoUtils::genCheckpointFileName(employeeId);
     ifstream fin;
     fin.open(fileName, ios::in);
@@ -153,7 +153,7 @@ void FileIoUtils::rewriteCheckPoint(string & employeeId, list<CheckPoint> & chec
     string fileName = FileIoUtils::genCheckpointFileName(employeeId);
     ofstream fstream_ob;
     fstream_ob.open(fileName, ios::trunc);
-    
+
     if (fstream_ob.is_open()) {
         list<CheckPoint>::const_iterator itcp;
         for (itcp = checkPoints.begin(); itcp != checkPoints.end(); itcp++) {

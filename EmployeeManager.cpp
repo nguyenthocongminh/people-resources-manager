@@ -7,7 +7,9 @@
 //
 
 #include <string>
+#include <list>
 #include <iostream>
+#include <sstream>
 #include <ctime>
 
 #include "Employee.h"
@@ -86,9 +88,9 @@ void EmployeeManager::findEmployeeById()
             time_t now = time(0);
             tm *ltm = localtime(&now);
             
-            list<CheckPoint> checkpoints = this->filterByMonth(allCheckpoints, 1 + ltm->tm_mon, ltm->tm_year);
+            list<CheckPoint> checkpoints = filterByMonth(allCheckpoints, 1 + ltm->tm_mon, ltm->tm_year + 1900);
             
-            this->printCheckPointSortByDay(checkpoints);
+            printCheckPointSortByDay(checkpoints);
             return;
         }
     }
@@ -149,7 +151,7 @@ void EmployeeManager::addCheckPoint()
     string employeeId;
     cout << "\nNhap id nhan vien: ";
     cin >> employeeId;
-    
+
     string date, status;
     cout << "Nhap ngay diem danh (0 de tro lai menu): ";
     cin >> date;
@@ -160,7 +162,7 @@ void EmployeeManager::addCheckPoint()
     if (date == "0") {
         return;
     }
-    
+
     cout << "Nhap trang thai (0 de tro lai menu): ";
     cin >> status;
     while (status != "0" && !ValidateUtils::validateStatus(status)) {
@@ -170,9 +172,9 @@ void EmployeeManager::addCheckPoint()
     if (status == "0") {
         return;
     }
-    
+
     CheckPoint *cp = new CheckPoint(employeeId, date, status);
-    
+
     list<CheckPoint> checkpoints = FileIoUtils::loadCheckPoint(employeeId);
     list<CheckPoint>::const_iterator itcp;
     for (itcp = checkpoints.begin(); itcp != checkpoints.end(); itcp++) {
@@ -193,16 +195,31 @@ void EmployeeManager::addCheckPoint()
     FileIoUtils::addCheckPoint(*cp);
 }
 
-list<CheckPoint> & EmployeeManager::filterByMonth(list<CheckPoint> & checkpoints, int month, int year)
+list<CheckPoint> EmployeeManager::filterByMonth(const list<CheckPoint> & checkpoints, int month, int year)
 {
-    static list<CheckPoint> result;
-    result.insert(result.end(), checkpoints.begin(), checkpoints.end()); // TODO: filter by month here
-    return checkpoints;
+    list<CheckPoint> result;
+    list<CheckPoint>::const_iterator itcp;
+    for (itcp = checkpoints.begin(); itcp != checkpoints.end(); itcp++) {
+        stringstream s(itcp->date());
+        string list[3];
+        string tmp;
+        int i = 0;
+        while (getline(s, tmp, '/') && i < 3) {
+            list[i++] = tmp;
+        }
+        int monthCP, yearCP;
+        istringstream(list[1]) >> monthCP;
+        istringstream(list[2]) >> yearCP;
+        if (month == monthCP && year == yearCP) {
+            result.push_back(*itcp);
+        }
+    }
+    return result;
 }
 
 void EmployeeManager::printCheckPointSortByDay(list<CheckPoint> &checkpoints)
 {
-    // TODO: replace logic: print checkpoint date + value in sorted day
+    checkpoints.sort();
     list<CheckPoint>::const_iterator itcp;
     for (itcp = checkpoints.begin(); itcp != checkpoints.end(); itcp++) {
         itcp->printValue();
