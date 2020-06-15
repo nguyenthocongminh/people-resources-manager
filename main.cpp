@@ -36,6 +36,10 @@ void startApplication(){
         cout << "\n\t------------------------------------------------";
         cout << "\n\t5:   Diem danh";
         cout << "\n\t------------------------------------------------";
+        cout << "\n\t6:   Tim theo ten";
+        cout << "\n\t------------------------------------------------";
+        cout << "\n\t7:   Lich su diem danh";
+        cout << "\n\t------------------------------------------------";
         cout << "\n\t0:   Thoat     ";
         cout << "\n\t------------------------------------------------";
         cout << "\n\n\tChon chuc nang: ";
@@ -82,7 +86,11 @@ void startApplication(){
                 break;
             case 6:
                 _CLEAR;
-                cout << "Danh sach diem danh: method has not support";
+                EmployeeManager::instance()->searchByName();
+                break;
+            case 7:
+                _CLEAR;
+                EmployeeManager::instance()->checkpointHistory();
                 break;
             default:
                 cout<<"\n No option! \n";

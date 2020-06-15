@@ -98,6 +98,102 @@ void EmployeeManager::findEmployeeById()
     cout << "Khong tim thay nhan vien id = " << id << "\n";
 }
 
+void EmployeeManager::searchByName()
+{
+    string name;
+    cout << "\nNhap ten: ";
+    cin >> name;
+    
+    bool exist = false;
+    
+    list<Employee>::const_iterator it;
+    for (it = _employees.begin(); it != _employees.end(); it++) {
+        if (it->name().find(name) !=  string::npos ) {
+            // TODO: 01 tolower(it->name()).find(tolower(name))
+            it->printInfo();
+            exist= true;
+        }
+    }
+    
+    if(!exist){
+        cout << "Khong tim thay nhan vien ten = " << name << "\n";
+    }
+}
+
+void EmployeeManager::checkpointHistory()
+{
+    int month;
+    cout << "\nNhap thang: ";
+    cin >> month;
+    
+    int year;
+    cout << "\nNhap nam: ";
+    cin >> year;
+    
+    string option;
+    cout << "\nNhap chuc nang 1-Theo nhan vien; 2-Theo bo phan; 3-Tat ca: ";
+    cin >> option;
+    
+    string textSearch;
+    if(option == "1") {
+        cout << "\nNhap id: ";
+        cin >> textSearch;
+    }
+    if(option == "2") {
+        cout << "\nNhap bo phan: ";
+        cin >> textSearch;
+    }
+        
+    bool exist = false;
+    list<Employee> employees;
+    
+    list<Employee>::const_iterator it;
+    
+    if(option == "3"){
+        employees = _employees;
+        exist = true;
+    }else{
+        for (it = _employees.begin(); it != _employees.end(); it++) {
+            // TODO: 02 filter by textSearch and option here
+            exist = true;
+            employees.push_back(*it);
+        }
+    }
+    
+    if(exist){
+        for (it = employees.begin(); it != employees.end(); it++) {
+            list<CheckPoint> cps = filterByMonth(FileIoUtils::loadCheckPoint((*it).id()), month, year);
+            cout << "------\n";
+            (*it).printInfo();
+            printCheckPointSortByDay(cps, month, year);
+            cout << "------\n";
+        }
+    }
+    
+    if(!exist){
+        cout << "Khong tim thay ket qua nao;\n";
+        cout << "Thang: " << month << "/" << year << ";\n";
+        if(option == "1") {
+            cout << "1-Theo nhan vien;\n";
+        }
+        if(option == "2") {
+            cout << "2-Theo bo phan;\n";
+        }
+        if(option == "2" || option == "1") {
+            cout << "Tim kiem: " << textSearch << ";\n";
+        }
+    }
+    if(exist){
+        string csvOption;
+        cout << "Ban co muon xuat ket qua ra .csv Y/N ?";
+        cin >> csvOption;
+        if (csvOption == "Y" || csvOption == "y") {
+            // TODO: 03 csv here: pass data to FileUtils, gen csv, return csv file path
+            // cout << csv file path
+        }
+    }
+}
+
 void EmployeeManager::printEmployees()
 {
     cout<<"\n----------------------------------------------------------------------------";
@@ -247,7 +343,7 @@ void EmployeeManager::printCheckPointSortByDay(list<CheckPoint> &checkpoints, in
         if(status == "-1xozooo"){
             cout << setw(2) << "X" << ";" << "\t";
         }
-        if(i % 5 == 0) {
+        if(i % 10 == 0) {
             cout << "\n";
         }
     }
