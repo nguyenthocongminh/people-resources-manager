@@ -161,9 +161,9 @@ void EmployeeManager::checkpointHistory()
     }
     
     if(exist){
+        cout << "------\n";
         for (it = employees.begin(); it != employees.end(); it++) {
             list<CheckPoint> cps = filterByMonth(FileIoUtils::loadCheckPoint((*it).id()), month, year);
-            cout << "------\n";
             (*it).printInfo();
             printCheckPointSortByDay(cps, month, year);
             cout << "------\n";
