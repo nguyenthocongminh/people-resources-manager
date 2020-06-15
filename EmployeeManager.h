@@ -36,6 +36,8 @@ public:
     void refeshData();
     void importCsv();
     void addCheckPoint();
+    void searchByName();
+    void checkpointHistory();
     
 private:
     list<CheckPoint> filterByMonth(const list<CheckPoint> & checkpoints, int month, int year);
