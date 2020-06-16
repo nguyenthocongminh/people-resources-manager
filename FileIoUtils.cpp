@@ -11,6 +11,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <filesystem>
 
 #include "Employee.h"
 #include "FileIoUtils.h"
@@ -138,8 +139,21 @@ list<CheckPoint> FileIoUtils::loadCheckPoint(const string & employeeId)
 
 const string FileIoUtils::genCheckpointFileName(const string & employeeId)
 {
+    
     string fileName = "checkpoint-" + employeeId + ".csv";
     return fileName;
+}
+
+const string FileIoUtils::genCheckpointHistory(const list<EmployeeDTO> &employees)
+{
+    string fileName = "abc-xyz-123.csv";
+    ofstream fstream_ob;
+    fstream_ob.open(fileName, ios::trunc);
+    
+    // TODO: 04 have to implement
+    // write to file: id, name, department, 01/06/2020: x, 02/06/2020: DL, ......
+    
+    return ""; // Return absulute file path
 }
 
 bool FileIoUtils::checkExist(string &path)

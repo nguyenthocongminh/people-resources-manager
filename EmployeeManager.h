@@ -42,7 +42,6 @@ public:
 private:
     list<CheckPoint> filterByMonth(const list<CheckPoint> & checkpoints, int month, int year);
     void printCheckPointSortByDay(list<CheckPoint> & checkpoints, int month, int year);
-    int getNumberOfDays(int month, int year);
 };
 
 #endif /* EmployeeManager_hpp */

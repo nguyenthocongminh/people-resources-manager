@@ -16,7 +16,7 @@ using namespace std;
 
 class Employee;
 class CheckPoint;
-
+class EmployeeDTO;
 class FileIoUtils {
     
 private:
@@ -32,5 +32,6 @@ public:
     static list<CheckPoint> loadCheckPoint(const string & employeeId); // Get checkpoit of a employee by employee_id
     static void rewriteCheckPoint(string & employeeId, list<CheckPoint> & checkPoints);
     static const string genCheckpointFileName(const string & employeeId); // Specify checkpoint file by employeeId
+    static const string genCheckpointHistory(const list<EmployeeDTO> & employees);
 };
 #endif /* FileIoUtils_hpp */

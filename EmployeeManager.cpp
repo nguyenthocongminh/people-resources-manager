@@ -13,10 +13,13 @@
 #include <ctime>
 #include <iomanip>
 #include "Employee.h"
+#include "EmployeeDTO.h"
 #include "EmployeeManager.h"
 #include "FileIoUtils.h"
 #include "ValidateUtils.h"
 #include "CheckPoint.h"
+#include "DateUtils.h"
+#include "StringUtils.h"
 
 using namespace std;
 
@@ -108,8 +111,8 @@ void EmployeeManager::searchByName()
     
     list<Employee>::const_iterator it;
     for (it = _employees.begin(); it != _employees.end(); it++) {
-        if (it->name().find(name) !=  string::npos ) {
-            // TODO: 01 tolower(it->name()).find(tolower(name))
+        if (StringUtils::containIgnoreCase(it->name(), name)) {
+            // TODO: 01 have to implement StringUtils::containIgnoreCase
             it->printInfo();
             exist= true;
         }
@@ -160,6 +163,8 @@ void EmployeeManager::checkpointHistory()
         }
     }
     
+    list<EmployeeDTO> employeeDtos;
+    
     if(exist){
         cout << "------\n";
         for (it = employees.begin(); it != employees.end(); it++) {
@@ -167,6 +172,10 @@ void EmployeeManager::checkpointHistory()
             (*it).printInfo();
             printCheckPointSortByDay(cps, month, year);
             cout << "------\n";
+            
+            list<string> checkpointStrs = StringUtils::checkpointsToListString(month, year, cps);
+            EmployeeDTO *emDto = new EmployeeDTO((*it).id(), (*it).name(), (*it).department(), checkpointStrs);
+            employeeDtos.push_back(*emDto);
         }
     }
     
@@ -188,8 +197,8 @@ void EmployeeManager::checkpointHistory()
         cout << "Ban co muon xuat ket qua ra .csv Y/N ?";
         cin >> csvOption;
         if (csvOption == "Y" || csvOption == "y") {
-            // TODO: 03 csv here: pass data to FileUtils, gen csv, return csv file path
-            // cout << csv file path
+            // TODO: 03 csv here: pass data to FileIoUtils::genCheckpointHistory, gen csv, return csv file path
+            cout << "Xuat file: " << FileIoUtils::genCheckpointHistory(employeeDtos);
         }
     }
 }
@@ -316,8 +325,8 @@ list<CheckPoint> EmployeeManager::filterByMonth(const list<CheckPoint> & checkpo
 void EmployeeManager::printCheckPointSortByDay(list<CheckPoint> &checkpoints, int month, int year)
 {
     
-    checkpoints.sort();
-    int numberOfDays = getNumberOfDays(month, year);
+//    checkpoints.sort();
+    int numberOfDays = DateUtils::getNumberOfDays(month, year);
     string dayOfMonth[numberOfDays];
     
     list<CheckPoint>::const_iterator itcp;
@@ -331,7 +340,7 @@ void EmployeeManager::printCheckPointSortByDay(list<CheckPoint> &checkpoints, in
         
         cout << dateStr + ": ";
         
-        string status = "-1xozooo";
+        string status = "-1xozoOo";
         for (itcp = checkpoints.begin(); itcp != checkpoints.end(); itcp++) {
             if(dateStr.compare(itcp->date()) == 0) {
                 cout << setw(2) << itcp->value() << ";" << "\t";
@@ -340,7 +349,7 @@ void EmployeeManager::printCheckPointSortByDay(list<CheckPoint> &checkpoints, in
                 break;
             }
         }
-        if(status == "-1xozooo"){
+        if(status == "-1xozoOo"){
             cout << setw(2) << "X" << ";" << "\t";
         }
         if(i % 10 == 0) {
@@ -348,20 +357,7 @@ void EmployeeManager::printCheckPointSortByDay(list<CheckPoint> &checkpoints, in
         }
     }
 }
-int EmployeeManager::getNumberOfDays(int month, int year)
-{
-    if(month == 2) {
-        if((year % 400 == 0) || (year % 4 == 0 && year % 100 != 0)){
-            return 29;
-        } else {
-            return 28;
-        }
-    } else if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12){
-        return 31;
-    }else {
-        return 30;
-    }
-}
+
 void EmployeeManager::refeshData()
 {
     _employees.clear();
