@@ -118,7 +118,6 @@ void EmployeeManager::searchByName()
     list<Employee>::const_iterator it;
     for (it = _employees.begin(); it != _employees.end(); it++) {
         if (StringUtils::containIgnoreCase(it->name(), name)) {
-            // TODO: 01 have to implement StringUtils::containIgnoreCase
             it->printInfo();
             exist= true;
         }
