@@ -146,14 +146,18 @@ const string FileIoUtils::genCheckpointFileName(const string & employeeId)
 
 const string FileIoUtils::genCheckpointHistory(const list<EmployeeDTO> &employees)
 {
-    string fileName = "abc-xyz-123.csv";
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+    
+    string fileName = "checkpoint-history_" + to_string(ltm->tm_year + 1900) + "_" + to_string(1 + ltm->tm_mon) + "_" + to_string(ltm->tm_mday) + to_string(ltm->tm_hour) + "_" + to_string(ltm->tm_min) + "_" + to_string(ltm->tm_sec) + ".csv";
+    
     ofstream fstream_ob;
     fstream_ob.open(fileName, ios::trunc);
     
     // TODO: 04 have to implement
     // write to file: id, name, department, 01/06/2020: x, 02/06/2020: DL, ......
     
-    return ""; // Return absulute file path
+    return fileName; // Have to replace return absulute file path
 }
 
 bool FileIoUtils::checkExist(string &path)

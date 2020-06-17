@@ -12,6 +12,10 @@
 #include <sstream>
 #include <ctime>
 #include <iomanip>
+#include <chrono>
+#include <thread>
+#include <future>
+
 #include "Employee.h"
 #include "EmployeeDTO.h"
 #include "EmployeeManager.h"
@@ -22,6 +26,7 @@
 #include "StringUtils.h"
 
 using namespace std;
+using namespace std::chrono;
 
 EmployeeManager::EmployeeManager()
 {
@@ -167,6 +172,7 @@ void EmployeeManager::checkpointHistory()
     
     if(exist){
         cout << "------\n";
+        auto start = high_resolution_clock::now();
         for (it = employees.begin(); it != employees.end(); it++) {
             list<CheckPoint> cps = filterByMonth(FileIoUtils::loadCheckPoint((*it).id()), month, year);
             (*it).printInfo();
@@ -177,6 +183,9 @@ void EmployeeManager::checkpointHistory()
             EmployeeDTO *emDto = new EmployeeDTO((*it).id(), (*it).name(), (*it).department(), checkpointStrs);
             employeeDtos.push_back(*emDto);
         }
+        auto stop = high_resolution_clock::now();
+        auto duration = duration_cast<microseconds>(stop - start);
+        cout << "Time to read in microseconds: " << duration.count() << "\n";
     }
     
     if(!exist){
@@ -200,6 +209,61 @@ void EmployeeManager::checkpointHistory()
             // TODO: 03 csv here: pass data to FileIoUtils::genCheckpointHistory, gen csv, return csv file path
             cout << "Xuat file: " << FileIoUtils::genCheckpointHistory(employeeDtos);
         }
+    }
+}
+void readFileByThread(promise<list<CheckPoint>> && promise, list<Employee> employees)
+{
+//    list<Employee>::const_iterator it;
+//    for (it = employees.begin(); it != employees.end(); it++) {
+//        list<CheckPoint> cps = filterByMonth(FileIoUtils::loadCheckPoint((*it).id()), month, year);
+//        (*it).printInfo();
+//        printCheckPointSortByDay(cps, month, year);
+//        cout << "------\n";
+//
+//        list<string> checkpointStrs = StringUtils::checkpointsToListString(month, year, cps);
+//        EmployeeDTO *emDto = new EmployeeDTO((*it).id(), (*it).name(), (*it).department(), checkpointStrs);
+//        employeeDtos.push_back(*emDto);
+//    }
+}
+void EmployeeManager::checkpointHistoryMultiThread()
+{
+    int month;
+    cout << "\nNhap thang: ";
+    cin >> month;
+    
+    int year;
+    cout << "\nNhap nam: ";
+    cin >> year;
+    
+    string option;
+    cout << "\nNhap chuc nang demo cho multiple thread option = 3-Tat ca: ";
+    cin >> option;
+    
+    list<Employee>::const_iterator it;
+    
+    list<EmployeeDTO> employeeDtos;
+    
+    cout << "------\n";
+    auto start = high_resolution_clock::now();
+    for (it = _employees.begin(); it != _employees.end(); it++) {
+        list<CheckPoint> cps = filterByMonth(FileIoUtils::loadCheckPoint((*it).id()), month, year);
+        (*it).printInfo();
+        printCheckPointSortByDay(cps, month, year);
+        cout << "------\n";
+        
+        list<string> checkpointStrs = StringUtils::checkpointsToListString(month, year, cps);
+        EmployeeDTO *emDto = new EmployeeDTO((*it).id(), (*it).name(), (*it).department(), checkpointStrs);
+        employeeDtos.push_back(*emDto);
+    }
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
+    cout << "Time to read in microseconds: " << duration.count() << "\n";
+    
+    string csvOption;
+    cout << "Ban co muon xuat ket qua ra .csv Y/N ?";
+    cin >> csvOption;
+    if (csvOption == "Y" || csvOption == "y") {
+        cout << "Xuat file: " << FileIoUtils::genCheckpointHistory(employeeDtos);
     }
 }
 

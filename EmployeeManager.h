@@ -38,6 +38,7 @@ public:
     void addCheckPoint();
     void searchByName();
     void checkpointHistory();
+    void checkpointHistoryMultiThread();
     
 private:
     list<CheckPoint> filterByMonth(const list<CheckPoint> & checkpoints, int month, int year);
