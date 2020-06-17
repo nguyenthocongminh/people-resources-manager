@@ -40,6 +40,8 @@ void startApplication(){
         cout << "\n\t------------------------------------------------";
         cout << "\n\t7:   Lich su diem danh";
         cout << "\n\t------------------------------------------------";
+        cout << "\n\t8:   Lich su diem danh multiple thread";
+        cout << "\n\t------------------------------------------------";
         cout << "\n\t0:   Thoat     ";
         cout << "\n\t------------------------------------------------";
         cout << "\n\n\tChon chuc nang: ";
@@ -91,6 +93,10 @@ void startApplication(){
             case 7:
                 _CLEAR;
                 EmployeeManager::instance()->checkpointHistory();
+                break;
+            case 8:
+                _CLEAR;
+                EmployeeManager::instance()->checkpointHistoryMultiThread();
                 break;
             default:
                 cout<<"\n No option! \n";

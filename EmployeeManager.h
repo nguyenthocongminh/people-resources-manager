@@ -9,6 +9,8 @@
 #ifndef EmployeeManager_hpp
 #define EmployeeManager_hpp
 #include <stdio.h>
+#include <future>
+#include <vector>
 #include <string>
 #include <list>
 using namespace std;
@@ -39,6 +41,7 @@ public:
     void searchByName();
     void checkpointHistory();
     void checkpointHistoryMultiThread();
+    void readFileByThread(promise<list<CheckPoint>> && promise, vector<Employee> employees, int month, int year);
     
 private:
     list<CheckPoint> filterByMonth(const list<CheckPoint> & checkpoints, int month, int year);
