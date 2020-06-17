@@ -46,7 +46,7 @@ public:
     
 private:
     list<CheckPoint> filterByMonth(const list<CheckPoint> & checkpoints, int month, int year);
-    void printCheckPointSortByDay(list<CheckPoint> & checkpoints, int month, int year);
+    void printCheckPointSortByDay(const list<CheckPoint> & checkpoints, int month, int year);
 };
 
 #endif /* EmployeeManager_hpp */

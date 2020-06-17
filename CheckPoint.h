@@ -6,8 +6,8 @@
 //  Copyright © 2020 Trieu. All rights reserved.
 //
 
-#ifndef CheckPoint_hpp
-#define CheckPoint_hpp
+#ifndef CheckPoint_h
+#define CheckPoint_h
 
 #include <stdio.h>
 #include <string>
@@ -41,4 +41,4 @@ public:
     void printValue() const;
 };
 
-#endif /* CheckPoint_hpp */
+#endif /* CheckPoint_h */

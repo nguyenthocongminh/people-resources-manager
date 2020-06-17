@@ -186,7 +186,6 @@ void EmployeeManager::checkpointHistory()
             printCheckPointSortByDay(cps, month, year);
             cout << "------\n";
             
-//            list<string> checkpointStrs = StringUtils::checkpointsToListString(month, year, cps);
             EmployeeDTO *emDto = new EmployeeDTO((*it).id(), (*it).name(), (*it).department(), cps);
             employeeDtos.push_back(*emDto);
         }
@@ -209,7 +208,7 @@ void EmployeeManager::checkpointHistory()
             cout << "Tim kiem: " << textSearch << ";\n";
         }
     }
-    if(exist){
+    if(exist) {
         string csvOption;
         cout << "Ban co muon xuat ket qua ra .csv Y/N ?";
         cin >> csvOption;
@@ -246,10 +245,6 @@ void EmployeeManager::checkpointHistoryMultiThread()
     string option;
     cout << "\nChuc nang demo cho multiple thread option = 3-Tat ca:\n";
     
-    list<Employee>::const_iterator it;
-    
-    list<EmployeeDTO> employeeDtos;
-    
     cout << "------\n";
     auto start = high_resolution_clock::now();
     
@@ -274,33 +269,23 @@ void EmployeeManager::checkpointHistoryMultiThread()
         threads[i] = thread(&EmployeeManager::readFileByThread, *this, move(promiseHandle), empls, month, year);
     }
     
-    list<EmployeeDTO> emDtos;
+    list<EmployeeDTO> employeeDtos;
     
     for(int i = 0; i < splitNum; i++) {
-//        list<CheckPoint>::const_iterator itcp;
         
         list<EmployeeDTO>::const_iterator itDto;
-        emDtos = futures[i].get();
+        employeeDtos = futures[i].get();
         
-        for (itDto = emDtos.begin(); itDto != emDtos.end(); itDto++) {
+        for (itDto = employeeDtos.begin(); itDto != employeeDtos.end(); itDto++) {
             itDto->printInfo();
+            printCheckPointSortByDay(itDto->checkpoints(), month, year);
+            cout << "------\n";
         }
     }
 
     for(auto i = 0; i < splitNum; i++) {
         threads[i].join();
     }
-    
-//    for (it = _employees.begin(); it != _employees.end(); it++) {
-//        list<CheckPoint> cps = filterByMonth(FileIoUtils::loadCheckPoint((*it).id()), month, year);
-//        (*it).printInfo();
-//        printCheckPointSortByDay(cps, month, year);
-//        cout << "------\n";
-//
-//        list<string> checkpointStrs = StringUtils::checkpointsToListString(month, year, cps);
-//        EmployeeDTO *emDto = new EmployeeDTO((*it).id(), (*it).name(), (*it).department(), checkpointStrs);
-//        employeeDtos.push_back(*emDto);
-//    }
     
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);
@@ -433,7 +418,7 @@ list<CheckPoint> EmployeeManager::filterByMonth(const list<CheckPoint> & checkpo
     return result;
 }
 
-void EmployeeManager::printCheckPointSortByDay(list<CheckPoint> &checkpoints, int month, int year)
+void EmployeeManager::printCheckPointSortByDay(const list<CheckPoint> &checkpoints, int month, int year)
 {
     
 //    checkpoints.sort();

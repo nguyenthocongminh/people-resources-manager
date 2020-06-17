@@ -6,15 +6,16 @@
 //  Copyright © 2020 Trieu. All rights reserved.
 //
 
-#include "ValidateUtils.h"
-#include "FileIoUtils.h"
-#include "Employee.h"
 #include <string>
 #include <sstream>
 #include <regex>
 #include <iostream>
 #include <ctime>
+
 #include "EmployeeManager.h"
+#include "ValidateUtils.h"
+#include "FileIoUtils.h"
+#include "Employee.h"
 
 using namespace std;
 
