@@ -20,7 +20,6 @@ class StringUtils {
     
 public:
     static const bool containIgnoreCase(const string & str1, const string & str2);
-    static list<string> checkpointsToListString(const int month, const int year, const list<CheckPoint> &checkpoints);
     
 };
 #endif /* StringUtils_h */
