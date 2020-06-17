@@ -14,6 +14,6 @@
 class DateUtils
 {
 public:
-    const static int getNumberOfDays(int month, int year);
+    static int getNumberOfDays(int month, int year);
 };
 #endif /* DateUtils_h */

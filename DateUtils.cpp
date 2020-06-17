@@ -8,7 +8,7 @@
 
 #include "DateUtils.h"
 
-const int DateUtils::getNumberOfDays(int month, int year)
+int DateUtils::getNumberOfDays(int month, int year)
 {
     if(month == 2) {
         if((year % 400 == 0) || (year % 4 == 0 && year % 100 != 0)){
