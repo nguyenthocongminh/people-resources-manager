@@ -6,9 +6,10 @@
 //  Copyright © 2020 Trieu. All rights reserved.
 //
 
-#include "Employee.h"
 #include <string>
 #include <iostream>
+
+#include "Employee.h"
 
 using namespace std;
 

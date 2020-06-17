@@ -6,8 +6,8 @@
 //  Copyright © 2020 Trieu. All rights reserved.
 //
 
-#ifndef ValidateUtils_hpp
-#define ValidateUtils_hpp
+#ifndef ValidateUtils_h
+#define ValidateUtils_h
 
 #include <stdio.h>
 #include <string>
@@ -26,4 +26,4 @@ public:
     static bool validateDate (const string &date);
     static bool validateStatus(const string &status);
 };
-#endif /* ValidateUtils_hpp */
+#endif /* ValidateUtils_h */

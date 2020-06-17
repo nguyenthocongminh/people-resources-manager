@@ -11,11 +11,14 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <vector>
 #include <filesystem>
 
 #include "Employee.h"
 #include "FileIoUtils.h"
 #include "CheckPoint.h"
+#include "EmployeeDTO.h"
+#include "DateUtils.h"
 using namespace std;
 
 string FileIoUtils::_resourceFile = "employees.txt";
@@ -144,16 +147,114 @@ const string FileIoUtils::genCheckpointFileName(const string & employeeId)
     return fileName;
 }
 
-const string FileIoUtils::genCheckpointHistory(const list<EmployeeDTO> &employees)
+const string FileIoUtils::genCheckpointHistoryMulti(const vector<list<EmployeeDTO>> &employeesVector, int month, int year)
 {
-    string fileName = "abc-xyz-123.csv";
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+    string fileName = "checkpoint-history-"+ to_string(month) + "-" + to_string(year) + "__" + to_string(ltm->tm_year + 1900) + "_" + to_string(1 + ltm->tm_mon) + "_" + to_string(ltm->tm_mday) + to_string(ltm->tm_hour) + "_" + to_string(ltm->tm_min) + "_" + to_string(ltm->tm_sec) + ".csv";
+    
     ofstream fstream_ob;
-    fstream_ob.open(fileName, ios::trunc);
+    fstream_ob.open(fileName, ios::app);
     
-    // TODO: 04 have to implement
-    // write to file: id, name, department, 01/06/2020: x, 02/06/2020: DL, ......
+    // header
+    fstream_ob << "ID," << "Ten," << "Phong";
     
-    return ""; // Return absulute file path
+    int numberOfDays = DateUtils::getNumberOfDays(month, year);
+    string dayOfMonth[numberOfDays];
+    
+    string monthStr = month >= 10 ? to_string(month) : "0" + to_string(month);
+    
+    for(int i = 1; i <= numberOfDays; i++){
+        string dayStr = i >= 10 ? to_string(i) : "0" + to_string(i);
+        string dateStr = dayStr + "/" + monthStr + "/" + to_string(year);
+        dayOfMonth[i-1] = dateStr;
+        fstream_ob << "," << dateStr;
+    }
+    fstream_ob << endl;
+    // end header
+    
+    list<CheckPoint>::const_iterator itcp;
+    list<EmployeeDTO>::const_iterator itemDto;
+    
+    for(list<EmployeeDTO> employees : employeesVector) {
+        for (itemDto = employees.begin(); itemDto != employees.end(); itemDto++) {
+            fstream_ob << itemDto->id() << "," << itemDto->name() << "," << itemDto->department();
+            for(int i = 0; i < numberOfDays; i++){
+                string status = "-1xozoOo";
+                
+                for (itcp = itemDto->checkpoints().begin(); itcp != itemDto->checkpoints().end(); itcp++) {
+                    if(dayOfMonth[i].compare(itcp->date()) == 0) {
+                        fstream_ob << "," << itcp->value();
+                        status = itcp->value();
+                        break;
+                    }
+                }
+                if(status == "-1xozoOo"){
+                    fstream_ob << "," << "X";
+                }
+                
+            }
+            fstream_ob << endl;
+        }
+    }
+    
+    
+    return fileName;
+}
+
+
+const string FileIoUtils::genCheckpointHistory(const list<EmployeeDTO> &employees, int month, int year)
+{
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+    
+    string fileName = "checkpoint-history-"+ to_string(month) + "-" + to_string(year) + "__" + to_string(ltm->tm_year + 1900) + "_" + to_string(1 + ltm->tm_mon) + "_" + to_string(ltm->tm_mday) + to_string(ltm->tm_hour) + "_" + to_string(ltm->tm_min) + "_" + to_string(ltm->tm_sec) + ".csv";
+    
+    ofstream fstream_ob;
+    fstream_ob.open(fileName, ios::app);
+    
+    // header
+    fstream_ob << "ID," << "Ten," << "Phong";
+    
+    int numberOfDays = DateUtils::getNumberOfDays(month, year);
+    string dayOfMonth[numberOfDays];
+    
+    string monthStr = month >= 10 ? to_string(month) : "0" + to_string(month);
+    
+    for(int i = 1; i <= numberOfDays; i++){
+        string dayStr = i >= 10 ? to_string(i) : "0" + to_string(i);
+        string dateStr = dayStr + "/" + monthStr + "/" + to_string(year);
+        dayOfMonth[i-1] = dateStr;
+        fstream_ob << "," << dateStr;
+    }
+    fstream_ob << endl;
+    // end header
+    
+    list<CheckPoint>::const_iterator itcp;
+    list<EmployeeDTO>::const_iterator itemDto;
+    
+    for (itemDto = employees.begin(); itemDto != employees.end(); itemDto++) {
+        fstream_ob << itemDto->id() << "," << itemDto->name() << "," << itemDto->department();
+        for(int i = 0; i < numberOfDays; i++){
+            string status = "-1xozoOo";
+            
+            for (itcp = itemDto->checkpoints().begin(); itcp != itemDto->checkpoints().end(); itcp++) {
+                if(dayOfMonth[i].compare(itcp->date()) == 0) {
+                    fstream_ob << "," << itcp->value();
+                    status = itcp->value();
+                    break;
+                }
+            }
+            if(status == "-1xozoOo"){
+                fstream_ob << "," << "X";
+            }
+            
+        }
+        fstream_ob << endl;
+    }
+
+    
+    return fileName; // Have to replace return absulute file path
 }
 
 bool FileIoUtils::checkExist(string &path)
