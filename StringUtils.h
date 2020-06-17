@@ -19,7 +19,8 @@ class CheckPoint;
 class StringUtils {
     
 public:
-    static const bool containIgnoreCase(const string & str1, const string & str2);
-    
+    static bool containIgnoreCase(const string & str1, const string & str2);
+    static void toLower(string & str);
+    static void toUpper(string & str);
 };
 #endif /* StringUtils_h */

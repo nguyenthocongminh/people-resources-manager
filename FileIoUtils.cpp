@@ -12,7 +12,11 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#if __has_include(<filesystem>)
 #include <filesystem>
+#elif __has_include(<experimental/filesystem>)
+#include <experimental/filesystem>
+#endif
 
 #include "Employee.h"
 #include "FileIoUtils.h"
