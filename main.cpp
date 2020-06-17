@@ -43,6 +43,8 @@ void startApplication(){
         cout << "\n\t------------------------------------------------";
         cout << "\n\t8:   Lich su diem danh multiple thread";
         cout << "\n\t------------------------------------------------";
+        cout << "\n\t9:   Tao du lieu diem danh mau test performance";
+        cout << "\n\t------------------------------------------------";
         cout << "\n\t0:   Thoat     ";
         cout << "\n\t------------------------------------------------";
         cout << "\n\n\tChon chuc nang: ";
@@ -101,6 +103,13 @@ void startApplication(){
             case 8:
                 _CLEAR;
                 EmployeeManager::instance()->checkpointHistoryMultiThread();
+                cin.ignore(1);
+                wait();
+                break;
+            case 9:
+                _CLEAR;
+                // TODO
+                cout << "Method has not implement";
                 cin.ignore(1);
                 wait();
                 break;
