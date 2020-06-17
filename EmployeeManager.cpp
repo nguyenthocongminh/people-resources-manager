@@ -186,8 +186,8 @@ void EmployeeManager::checkpointHistory()
             printCheckPointSortByDay(cps, month, year);
             cout << "------\n";
             
-            list<string> checkpointStrs = StringUtils::checkpointsToListString(month, year, cps);
-            EmployeeDTO *emDto = new EmployeeDTO((*it).id(), (*it).name(), (*it).department(), checkpointStrs);
+//            list<string> checkpointStrs = StringUtils::checkpointsToListString(month, year, cps);
+            EmployeeDTO *emDto = new EmployeeDTO((*it).id(), (*it).name(), (*it).department(), cps);
             employeeDtos.push_back(*emDto);
         }
         
@@ -220,16 +220,17 @@ void EmployeeManager::checkpointHistory()
     }
 }
 
-void EmployeeManager::readFileByThread(promise<list<CheckPoint>> && promise, vector<Employee> employees, int month, int year)
+void EmployeeManager::readFileByThread(promise<list<EmployeeDTO>> && promise, vector<Employee> employees, int month, int year)
 {
-    list<CheckPoint> checkpoints;
+    list<EmployeeDTO> dtos;
     
     for(auto em : employees) {
         list<CheckPoint> cps = filterByMonth(FileIoUtils::loadCheckPoint(em.id()), month, year);
-        checkpoints.insert(checkpoints.end(), cps.begin(), cps.end());
+        EmployeeDTO *dto = new EmployeeDTO(em.id(), em.name(), em.department(), cps);
+        dtos.push_back(*dto);
     }
     
-    promise.set_value(checkpoints);
+    promise.set_value(dtos);
 }
 
 void EmployeeManager::checkpointHistoryMultiThread()
@@ -261,25 +262,28 @@ void EmployeeManager::checkpointHistoryMultiThread()
     long splitNum = (_employees.size() + sizeHandle - 1) / sizeHandle; // To round up, handle 500 employee in a thread
     
     thread threads[splitNum];
-    future<list<CheckPoint>> futures[splitNum];
+    future<list<EmployeeDTO>> futures[splitNum];
     
     vector<Employee> copyEmployees(_employees.begin(), _employees.end());
     
     for(int i = 0; i < splitNum; i++) {
-        vector<Employee> empls(copyEmployees.begin() + splitNum * i, copyEmployees.begin() + splitNum * (i + 1));
-        promise<list<CheckPoint>> promiseHandle;
+        vector<Employee> empls(copyEmployees.begin() + sizeHandle * i, copyEmployees.begin() + sizeHandle * (i + 1));
+        promise<list<EmployeeDTO>> promiseHandle;
         futures[i] = promiseHandle.get_future();
         
         threads[i] = thread(&EmployeeManager::readFileByThread, *this, move(promiseHandle), empls, month, year);
     }
     
-    list<CheckPoint> cps;
+    list<EmployeeDTO> emDtos;
     
     for(int i = 0; i < splitNum; i++) {
-        list<CheckPoint>::const_iterator itcp;
-        cps = futures[i].get();
-        for (itcp = cps.begin(); itcp != cps.end(); itcp++) {
-            itcp->printInfo();
+//        list<CheckPoint>::const_iterator itcp;
+        
+        list<EmployeeDTO>::const_iterator itDto;
+        emDtos = futures[i].get();
+        
+        for (itDto = emDtos.begin(); itDto != emDtos.end(); itDto++) {
+            itDto->printInfo();
         }
     }
 

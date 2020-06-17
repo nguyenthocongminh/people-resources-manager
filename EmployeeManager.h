@@ -17,6 +17,7 @@ using namespace std;
 
 class Employee;
 class CheckPoint;
+class EmployeeDTO;
 
 class EmployeeManager
 {
@@ -41,7 +42,7 @@ public:
     void searchByName();
     void checkpointHistory();
     void checkpointHistoryMultiThread();
-    void readFileByThread(promise<list<CheckPoint>> && promise, vector<Employee> employees, int month, int year);
+    void readFileByThread(promise<list<EmployeeDTO>> && promise, vector<Employee> employees, int month, int year);
     
 private:
     list<CheckPoint> filterByMonth(const list<CheckPoint> & checkpoints, int month, int year);

@@ -15,21 +15,24 @@
 
 using namespace std;
 
+class CheckPoint;
+
 class EmployeeDTO
 {
 public:
     EmployeeDTO(const string &id,
                 const string &name,
                 const string &department,
-                const list<string> &checkpoints);
+                const list<CheckPoint> &checkpoints);
     
 private:
     string _id;
     string _name;
     string _department;
-    list<string> _checkpoints;
+    list<CheckPoint> _checkpoints;
     
 public:
-    const list<string> & checkpoints() const;
+    const list<CheckPoint> & checkpoints() const;
+    void printInfo() const;
 };
 #endif /* EmployeeDTO_h */
