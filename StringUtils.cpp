@@ -11,12 +11,29 @@
 #include "DateUtils.h"
 
 #include <string>
+#include <cctype>
+#include <algorithm>
 
 using namespace std;
 
-const bool StringUtils::containIgnoreCase(const string &str1, const string &str2)
+bool StringUtils::containIgnoreCase(const string &str1, const string &str2)
 {
-    // TODO: implement IgnoreCase
-    return str1.find(str2) !=  string::npos;
+    string str1_tmp, str2_tmp;
+    str1_tmp = str1;
+    str2_tmp = str2;
+    toLower(str1_tmp);
+    toLower(str2_tmp);
+    return str1_tmp.find(str2_tmp) !=  string::npos;
 }
 
+void StringUtils::toLower(string &str) {
+    for_each(str.begin(), str.end(), [](char & c) {
+        c = tolower(c);
+    });
+}
+
+void StringUtils::toUpper(string &str) {
+    for_each(str.begin(), str.end(), [](char & c) {
+        c = toupper(c);
+    });
+}
