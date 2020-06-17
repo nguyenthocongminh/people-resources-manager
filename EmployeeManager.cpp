@@ -213,8 +213,7 @@ void EmployeeManager::checkpointHistory()
         cout << "Ban co muon xuat ket qua ra .csv Y/N ?";
         cin >> csvOption;
         if (csvOption == "Y" || csvOption == "y") {
-            // TODO: 03 csv here: pass data to FileIoUtils::genCheckpointHistory, gen csv, return csv file path
-            cout << "Xuat file: " << FileIoUtils::genCheckpointHistory(employeeDtos);
+            cout << "Xuat file: " << FileIoUtils::genCheckpointHistory(employeeDtos, month, year);
         }
     }
 }
@@ -268,11 +267,11 @@ void EmployeeManager::checkpointHistoryMultiThread()
         
         threads[i] = thread(&EmployeeManager::readFileByThread, *this, move(promiseHandle), empls, month, year);
     }
-    
-    list<EmployeeDTO> employeeDtos;
+    vector<list<EmployeeDTO>> employeeDtosVector;
     
     for(int i = 0; i < splitNum; i++) {
         
+        list<EmployeeDTO> employeeDtos;
         list<EmployeeDTO>::const_iterator itDto;
         employeeDtos = futures[i].get();
         
@@ -281,6 +280,7 @@ void EmployeeManager::checkpointHistoryMultiThread()
             printCheckPointSortByDay(itDto->checkpoints(), month, year);
             cout << "------\n";
         }
+        employeeDtosVector.push_back(employeeDtos);
     }
 
     for(auto i = 0; i < splitNum; i++) {
@@ -295,7 +295,7 @@ void EmployeeManager::checkpointHistoryMultiThread()
     cout << "Ban co muon xuat ket qua ra .csv Y/N ?";
     cin >> csvOption;
     if (csvOption == "Y" || csvOption == "y") {
-        cout << "Xuat file: " << FileIoUtils::genCheckpointHistory(employeeDtos); // TODO: have refactor write into one file
+        cout << "Xuat file: " << FileIoUtils::genCheckpointHistoryMulti(employeeDtosVector, month, year);
     }
 }
 
@@ -423,7 +423,6 @@ void EmployeeManager::printCheckPointSortByDay(const list<CheckPoint> &checkpoin
     
 //    checkpoints.sort();
     int numberOfDays = DateUtils::getNumberOfDays(month, year);
-    string dayOfMonth[numberOfDays];
     
     list<CheckPoint>::const_iterator itcp;
     

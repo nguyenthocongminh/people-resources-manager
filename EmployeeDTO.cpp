@@ -23,6 +23,19 @@ EmployeeDTO::EmployeeDTO(const string &id,
 {
 }
 
+const string &EmployeeDTO::id() const
+{
+    return _id;
+}
+const string &EmployeeDTO::name() const
+{
+    return _name;
+}
+const string &EmployeeDTO::department() const
+{
+    return _department;
+}
+
 const list<CheckPoint> & EmployeeDTO::checkpoints() const
 {
     return _checkpoints;

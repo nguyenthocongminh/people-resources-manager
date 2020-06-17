@@ -32,6 +32,9 @@ private:
     list<CheckPoint> _checkpoints;
     
 public:
+    const string &id() const;
+    const string &name() const;
+    const string &department() const;
     const list<CheckPoint> & checkpoints() const;
     void printInfo() const;
 };

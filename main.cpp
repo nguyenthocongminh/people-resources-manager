@@ -90,14 +90,19 @@ void startApplication(){
             case 6:
                 _CLEAR;
                 EmployeeManager::instance()->searchByName();
+                wait();
                 break;
             case 7:
                 _CLEAR;
                 EmployeeManager::instance()->checkpointHistory();
+                cin.ignore(1);
+                wait();
                 break;
             case 8:
                 _CLEAR;
                 EmployeeManager::instance()->checkpointHistoryMultiThread();
+                cin.ignore(1);
+                wait();
                 break;
             default:
                 cout<<"\n No option! \n";
@@ -109,6 +114,6 @@ void startApplication(){
 
 void wait()
 {
-    cout<<"-------------------------\nNhan Enter de tiep tuc ......\n"<<endl;
+    cout<<"\n-------------------------\nNhan Enter de tiep tuc ......\n"<<endl;
     cin.get();
 }
