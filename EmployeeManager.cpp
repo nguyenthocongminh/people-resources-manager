@@ -168,8 +168,14 @@ void EmployeeManager::checkpointHistory()
     }else{
         for (it = _employees.begin(); it != _employees.end(); it++) {
             // TODO: 02 filter by textSearch and option here
-            exist = true;
-            employees.push_back(*it);
+            if (option == "1" && it->id() == textSearch) {
+                exist = true;
+                employees.push_back(*it);
+            }
+            if (option == "2" && it->department() == textSearch) {
+                exist = true;
+                employees.push_back(*it);
+            }
         }
     }
     
