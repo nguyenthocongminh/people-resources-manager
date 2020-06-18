@@ -166,11 +166,23 @@ void EmployeeManager::checkpointHistory()
     if(option == "3"){
         employees = _employees;
         exist = true;
-    }else{
-        for (it = _employees.begin(); it != _employees.end(); it++) {
-            // TODO: 02 filter by textSearch and option here
-            exist = true;
-            employees.push_back(*it);
+    } else {
+        if (option == "1") {
+            for (it = _employees.begin(); it != _employees.end(); it++) {
+                if (it->id() == textSearch) {
+                    exist = true;
+                    employees.push_back(*it);
+                    break;
+                }
+            }
+        }
+        if (option == "2") {
+            for (it = _employees.begin(); it != _employees.end(); it++) {
+                if (it->department() == textSearch) {
+                    exist = true;
+                    employees.push_back(*it);
+                }
+            }
         }
     }
     
@@ -193,6 +205,13 @@ void EmployeeManager::checkpointHistory()
         auto stop = high_resolution_clock::now();
         auto duration = duration_cast<microseconds>(stop - start);
         cout << "Time to read in microseconds: " << duration.count() << "\n";
+
+        string csvOption;
+        cout << "Ban co muon xuat ket qua ra .csv Y/N ?";
+        cin >> csvOption;
+        if (csvOption == "Y" || csvOption == "y") {
+            cout << "Xuat file: " << FileIoUtils::genCheckpointHistory(employeeDtos, month, year);
+        }
     }
     
     if(!exist){
@@ -206,14 +225,6 @@ void EmployeeManager::checkpointHistory()
         }
         if(option == "2" || option == "1") {
             cout << "Tim kiem: " << textSearch << ";\n";
-        }
-    }
-    if(exist) {
-        string csvOption;
-        cout << "Ban co muon xuat ket qua ra .csv Y/N ?";
-        cin >> csvOption;
-        if (csvOption == "Y" || csvOption == "y") {
-            cout << "Xuat file: " << FileIoUtils::genCheckpointHistory(employeeDtos, month, year);
         }
     }
 }
