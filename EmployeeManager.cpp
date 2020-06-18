@@ -451,7 +451,43 @@ void EmployeeManager::printCheckPointSortByDay(const list<CheckPoint> &checkpoin
         }
     }
 }
-
+void EmployeeManager::genCheckpointSampleData()
+{
+    string months;
+    int year;
+    cout << "Nhap thang, cach nhau boi dau phay (,):\n";
+    cin >> months;
+    cout << "Nhap nam:\n";
+    cin >> year;
+    
+    string month;
+    vector<string> monthVector;
+    
+    stringstream strStream(months);
+    while (getline(strStream, month, ',')) {
+        monthVector.push_back(month);
+    }
+    
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+    int currenMonth = ltm->tm_mon + 1;
+    int currentYear = ltm->tm_year + 1900;
+    
+    if(currentYear < year){
+        cout << "\n" << year << " > " << currentYear << endl;;
+        return;
+    }
+    
+    list<Employee>::const_iterator it;
+    for (it = _employees.begin(); it != _employees.end(); it++) {
+        for(auto m : monthVector) {
+            if(stoi(m) > currenMonth) {
+                break;
+            }
+        }
+    }
+    
+}
 void EmployeeManager::refeshData()
 {
     _employees.clear();

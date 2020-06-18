@@ -43,6 +43,7 @@ public:
     void checkpointHistory();
     void checkpointHistoryMultiThread();
     void readFileByThread(promise<list<EmployeeDTO>> && promise, vector<Employee> employees, int month, int year);
+    void genCheckpointSampleData();
     
 private:
     list<CheckPoint> filterByMonth(const list<CheckPoint> & checkpoints, int month, int year);
