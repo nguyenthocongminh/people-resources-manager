@@ -16,6 +16,7 @@
 #include <thread>
 #include <future>
 #include <vector>
+#include <cstdlib>
 
 #include "Employee.h"
 #include "EmployeeDTO.h"
@@ -461,6 +462,103 @@ void EmployeeManager::printCheckPointSortByDay(const list<CheckPoint> &checkpoin
             cout << "\n";
         }
     }
+}
+
+void EmployeeManager::genCheckpointSampleData()
+{
+    string months;
+    int year;
+    cout << "Nhap thang, cach nhau boi dau phay (,):\n";
+    cin >> months;
+    cout << "Nhap nam:\n";
+    cin >> year;
+    
+    string month;
+    vector<string> monthVector;
+    
+    stringstream strStream(months);
+    while (getline(strStream, month, ',')) {
+        monthVector.push_back(month);
+    }
+    
+    int sizeHandle = 1000;
+    long splitNum = (_employees.size() + sizeHandle - 1) / sizeHandle; // To round up, handle 500 employee in a thread
+    
+    thread threads[splitNum];
+    
+    vector<Employee> copyEmployees(_employees.begin(), _employees.end());
+    
+    for(int i = 0; i < splitNum; i++) {
+        vector<Employee> empls(copyEmployees.begin() + sizeHandle * i, copyEmployees.begin() + sizeHandle * (i + 1));
+        
+        threads[i] = thread(&EmployeeManager::appendCheckpointByThread, *this, monthVector, empls, year);
+    }
+    
+    for(auto i = 0; i < splitNum; i++) {
+        threads[i].join();
+    }
+}
+
+void EmployeeManager::appendCheckpointByThread(const vector<string> & monthVector, const vector<Employee> & employees, int year)
+{
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+    int currenMonth = ltm->tm_mon + 1;
+    int currentYear = ltm->tm_year + 1900;
+    int currentDay = ltm->tm_mday;
+    
+    if(currentYear < year){
+        cout << "\n" << year << " > " << currentYear << endl;;
+        return;
+    }
+    
+    for (auto it : employees) {
+        list<CheckPoint> checkpoints;
+        
+        for(auto m : monthVector) {
+            if(stoi(m) > currenMonth) {
+                break;
+            }
+            
+            int numberOfDays = DateUtils::getNumberOfDays(stoi(m), year);
+            
+            list<CheckPoint>::const_iterator itcp;
+            
+            string monthStr = stoi(m) >= 10 ? m : "0" + m;
+            
+            for(int i = 1; i <= numberOfDays; i++){
+                if(year == currentYear && stoi(m) > currenMonth) {
+                    break;
+                }
+                if(year == currentYear && stoi(m) == currenMonth && i > currentDay) {
+                    break;
+                }
+                
+                string dayStr = i >= 10 ? to_string(i) : "0" + to_string(i);
+                string dateStr = dayStr + "/" + monthStr + "/" + to_string(year);
+                
+                int r = rand() % numberOfDays;
+                
+                CheckPoint *cp;
+                if(i == 31) {
+                    cp = new CheckPoint(it.id(), dateStr, "DLNN");
+                }
+                else if(r == 20) {
+                    cp = new CheckPoint(it.id(), dateStr, "NP");
+                }
+                else if(r == 7 || r == 15) {
+                    cp = new CheckPoint(it.id(), dateStr, "N");
+                }
+                else {
+                    cp = new CheckPoint(it.id(), dateStr, "DL");
+                }
+                checkpoints.push_back(*cp);
+            }
+        }
+        
+        FileIoUtils::appendCheckPoint(it.id(), checkpoints);
+    }
+
 }
 
 void EmployeeManager::refeshData()
