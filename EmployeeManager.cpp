@@ -480,11 +480,29 @@ void EmployeeManager::genCheckpointSampleData()
     
     list<Employee>::const_iterator it;
     for (it = _employees.begin(); it != _employees.end(); it++) {
+        list<CheckPoint> checkpoints;
+        
         for(auto m : monthVector) {
             if(stoi(m) > currenMonth) {
                 break;
             }
+            
+            int numberOfDays = DateUtils::getNumberOfDays(stoi(m), year);
+            
+            list<CheckPoint>::const_iterator itcp;
+            
+            string monthStr = stoi(m) >= 10 ? m : "0" + m;
+            
+            for(int i = 1; i <= numberOfDays; i++){
+                string dayStr = i >= 10 ? to_string(i) : "0" + to_string(i);
+                string dateStr = dayStr + "/" + monthStr + "/" + to_string(year);
+                
+                CheckPoint *cp = new CheckPoint(it->id(), dateStr, "DL");
+                checkpoints.push_back(*cp);
+            }
         }
+        
+        FileIoUtils::appendCheckPoint(it->id(), checkpoints);
     }
     
 }

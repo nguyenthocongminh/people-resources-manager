@@ -109,7 +109,7 @@ void startApplication(){
             case 9:
                 _CLEAR;
                 // TODO
-                cout << "Method has not implement";
+                EmployeeManager::instance()->genCheckpointSampleData();
                 cin.ignore(1);
                 wait();
                 break;

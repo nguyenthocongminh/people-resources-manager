@@ -267,11 +267,25 @@ bool FileIoUtils::checkExist(string &path)
     return f.good();
 }
 
-void FileIoUtils::rewriteCheckPoint(string & employeeId, list<CheckPoint> & checkPoints)
+void FileIoUtils::rewriteCheckPoint(const string & employeeId, const list<CheckPoint> & checkPoints)
 {
     string fileName = FileIoUtils::genCheckpointFileName(employeeId);
     ofstream fstream_ob;
     fstream_ob.open(fileName, ios::trunc);
+
+    if (fstream_ob.is_open()) {
+        list<CheckPoint>::const_iterator itcp;
+        for (itcp = checkPoints.begin(); itcp != checkPoints.end(); itcp++) {
+            fstream_ob << itcp->date() << "," << itcp->value() << endl;
+        }
+    }
+    fstream_ob.close();
+}
+void FileIoUtils::appendCheckPoint(const string & employeeId, const list<CheckPoint> & checkPoints)
+{
+    string fileName = FileIoUtils::genCheckpointFileName(employeeId);
+    ofstream fstream_ob;
+    fstream_ob.open(fileName, ios::app);
 
     if (fstream_ob.is_open()) {
         list<CheckPoint>::const_iterator itcp;
