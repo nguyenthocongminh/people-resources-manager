@@ -10,6 +10,7 @@
 #endif
 
 #include <iostream>
+
 #include "EmployeeManager.h"
 using namespace std;
 
@@ -34,7 +35,15 @@ void startApplication(){
         cout << "\n\t------------------------------------------------";
         cout << "\n\t4:   Import csv";
         cout << "\n\t------------------------------------------------";
-        cout << "\n\t5:   Danh sach diem danh";
+        cout << "\n\t5:   Diem danh";
+        cout << "\n\t------------------------------------------------";
+        cout << "\n\t6:   Tim theo ten";
+        cout << "\n\t------------------------------------------------";
+        cout << "\n\t7:   Lich su diem danh";
+        cout << "\n\t------------------------------------------------";
+        cout << "\n\t8:   Lich su diem danh multiple thread";
+        cout << "\n\t------------------------------------------------";
+        cout << "\n\t9:   Tao du lieu diem danh mau test performance";
         cout << "\n\t------------------------------------------------";
         cout << "\n\t0:   Thoat     ";
         cout << "\n\t------------------------------------------------";
@@ -82,7 +91,27 @@ void startApplication(){
                 break;
             case 6:
                 _CLEAR;
-                cout << "Danh sach diem danh: method has not support";
+                EmployeeManager::instance()->searchByName();
+                wait();
+                break;
+            case 7:
+                _CLEAR;
+                EmployeeManager::instance()->checkpointHistory();
+                cin.ignore(1);
+                wait();
+                break;
+            case 8:
+                _CLEAR;
+                EmployeeManager::instance()->checkpointHistoryMultiThread();
+                cin.ignore(1);
+                wait();
+                break;
+            case 9:
+                _CLEAR;
+                // TODO
+                EmployeeManager::instance()->genCheckpointSampleData();
+                cin.ignore(1);
+                wait();
                 break;
             default:
                 cout<<"\n No option! \n";
@@ -94,6 +123,6 @@ void startApplication(){
 
 void wait()
 {
-    cout<<"-------------------------\nNhan Enter de tiep tuc ......\n"<<endl;
+    cout<<"\n-------------------------\nNhan Enter de tiep tuc ......\n"<<endl;
     cin.get();
 }

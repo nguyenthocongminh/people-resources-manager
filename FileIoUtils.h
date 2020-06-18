@@ -16,7 +16,7 @@ using namespace std;
 
 class Employee;
 class CheckPoint;
-
+class EmployeeDTO;
 class FileIoUtils {
     
 private:
@@ -30,7 +30,10 @@ public:
     static bool checkExist(string & path);
     static void addCheckPoint(const CheckPoint & checkpoint); // Write to a file, indentify by employee_id
     static list<CheckPoint> loadCheckPoint(const string & employeeId); // Get checkpoit of a employee by employee_id
-    static void rewriteCheckPoint(string & employeeId, list<CheckPoint> & checkPoints);
+    static void rewriteCheckPoint(const string & employeeId, const list<CheckPoint> & checkPoints);
+    static void appendCheckPoint(const string & employeeId, const list<CheckPoint> & checkPoints);
     static const string genCheckpointFileName(const string & employeeId); // Specify checkpoint file by employeeId
+    static const string genCheckpointHistory(const list<EmployeeDTO> & employees, int month, int year);
+    static const string genCheckpointHistoryMulti(const vector<list<EmployeeDTO>> & employeesVector, int month, int year);
 };
 #endif /* FileIoUtils_hpp */

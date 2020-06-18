@@ -9,12 +9,15 @@
 #ifndef EmployeeManager_hpp
 #define EmployeeManager_hpp
 #include <stdio.h>
+#include <future>
+#include <vector>
 #include <string>
 #include <list>
 using namespace std;
 
 class Employee;
 class CheckPoint;
+class EmployeeDTO;
 
 class EmployeeManager
 {
@@ -36,11 +39,16 @@ public:
     void refeshData();
     void importCsv();
     void addCheckPoint();
+    void searchByName();
+    void checkpointHistory();
+    void checkpointHistoryMultiThread();
+    void readFileByThread(promise<list<EmployeeDTO>> && promise, vector<Employee> employees, int month, int year);
+    void genCheckpointSampleData();
+    void appendCheckpointByThread(const vector<string> & monthVector, const vector<Employee> & employees, int year);
     
 private:
     list<CheckPoint> filterByMonth(const list<CheckPoint> & checkpoints, int month, int year);
-    void printCheckPointSortByDay(list<CheckPoint> & checkpoints, int month, int year);
-    int getNumberOfDays(int month, int year);
+    void printCheckPointSortByDay(const list<CheckPoint> & checkpoints, int month, int year);
 };
 
 #endif /* EmployeeManager_hpp */

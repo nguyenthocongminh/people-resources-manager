@@ -12,13 +12,23 @@
 #include <sstream>
 #include <ctime>
 #include <iomanip>
+#include <chrono>
+#include <thread>
+#include <future>
+#include <vector>
+#include <cstdlib>
+
 #include "Employee.h"
+#include "EmployeeDTO.h"
 #include "EmployeeManager.h"
 #include "FileIoUtils.h"
 #include "ValidateUtils.h"
 #include "CheckPoint.h"
+#include "DateUtils.h"
+#include "StringUtils.h"
 
 using namespace std;
+using namespace std::chrono;
 
 EmployeeManager::EmployeeManager()
 {
@@ -96,6 +106,208 @@ void EmployeeManager::findEmployeeById()
     }
     
     cout << "Khong tim thay nhan vien id = " << id << "\n";
+}
+
+void EmployeeManager::searchByName()
+{
+    string name;
+    cout << "\nNhap ten: ";
+    cin >> name;
+    
+    bool exist = false;
+    
+    list<Employee>::const_iterator it;
+    for (it = _employees.begin(); it != _employees.end(); it++) {
+        if (StringUtils::containIgnoreCase(it->name(), name)) {
+            it->printInfo();
+            exist= true;
+        }
+    }
+    
+    if(!exist){
+        cout << "Khong tim thay nhan vien ten = " << name << "\n";
+    }
+}
+
+void EmployeeManager::checkpointHistory()
+{
+    int month;
+    cout << "\nNhap thang: ";
+    cin >> month;
+    
+    int year;
+    cout << "\nNhap nam: ";
+    cin >> year;
+    
+    string option;
+    cout << "\nNhap chuc nang 1-Theo nhan vien; 2-Theo bo phan; 3-Tat ca: ";
+    cin >> option;
+    
+    string textSearch;
+    if(option == "1") {
+        cout << "\nNhap id: ";
+        cin >> textSearch;
+    }
+    if(option == "2") {
+        cout << "\nNhap bo phan: ";
+        cin >> textSearch;
+    }
+        
+    if(_employees.size() <= 0) {
+        cout << "Khong co nhan vien nao !\n";
+        return;
+    }
+    
+    bool exist = false;
+    list<Employee> employees;
+    
+    list<Employee>::const_iterator it;
+    
+    if(option == "3"){
+        employees = _employees;
+        exist = true;
+    } else {
+        if (option == "1") {
+            for (it = _employees.begin(); it != _employees.end(); it++) {
+                if (it->id() == textSearch) {
+                    exist = true;
+                    employees.push_back(*it);
+                    break;
+                }
+            }
+        }
+        if (option == "2") {
+            for (it = _employees.begin(); it != _employees.end(); it++) {
+                if (it->department() == textSearch) {
+                    exist = true;
+                    employees.push_back(*it);
+                }
+            }
+        }
+    }
+    
+    list<EmployeeDTO> employeeDtos;
+    
+    if(exist){
+        cout << "------\n";
+        auto start = high_resolution_clock::now();
+        
+        for (it = employees.begin(); it != employees.end(); it++) {
+            list<CheckPoint> cps = filterByMonth(FileIoUtils::loadCheckPoint((*it).id()), month, year);
+            (*it).printInfo();
+            printCheckPointSortByDay(cps, month, year);
+            cout << "------\n";
+            
+            EmployeeDTO *emDto = new EmployeeDTO((*it).id(), (*it).name(), (*it).department(), cps);
+            employeeDtos.push_back(*emDto);
+        }
+        
+        auto stop = high_resolution_clock::now();
+        auto duration = duration_cast<microseconds>(stop - start);
+        cout << "Time to read in microseconds: " << duration.count() << "\n";
+
+        string csvOption;
+        cout << "Ban co muon xuat ket qua ra .csv Y/N ?";
+        cin >> csvOption;
+        if (csvOption == "Y" || csvOption == "y") {
+            cout << "Xuat file: " << FileIoUtils::genCheckpointHistory(employeeDtos, month, year);
+        }
+    }
+    
+    if(!exist){
+        cout << "Khong tim thay ket qua nao;\n";
+        cout << "Thang: " << month << "/" << year << ";\n";
+        if(option == "1") {
+            cout << "1-Theo nhan vien;\n";
+        }
+        if(option == "2") {
+            cout << "2-Theo bo phan;\n";
+        }
+        if(option == "2" || option == "1") {
+            cout << "Tim kiem: " << textSearch << ";\n";
+        }
+    }
+}
+
+void EmployeeManager::readFileByThread(promise<list<EmployeeDTO>> && promise, vector<Employee> employees, int month, int year)
+{
+    list<EmployeeDTO> dtos;
+    
+    for(auto em : employees) {
+        list<CheckPoint> cps = filterByMonth(FileIoUtils::loadCheckPoint(em.id()), month, year);
+        EmployeeDTO *dto = new EmployeeDTO(em.id(), em.name(), em.department(), cps);
+        dtos.push_back(*dto);
+    }
+    
+    promise.set_value(dtos);
+}
+
+void EmployeeManager::checkpointHistoryMultiThread()
+{
+    int month;
+    cout << "\nNhap thang: ";
+    cin >> month;
+    
+    int year;
+    cout << "\nNhap nam: ";
+    cin >> year;
+    
+    string option;
+    cout << "\nChuc nang demo cho multiple thread option = 3-Tat ca:\n";
+    
+    cout << "------\n";
+    auto start = high_resolution_clock::now();
+    
+    if(_employees.size() <= 0) {
+        cout << "Khong co nhan vien nao !\n";
+        return;
+    }
+    
+    int sizeHandle = 500;
+    long splitNum = (_employees.size() + sizeHandle - 1) / sizeHandle; // To round up, handle 500 employee in a thread
+    
+    thread threads[splitNum];
+    future<list<EmployeeDTO>> futures[splitNum];
+    
+    vector<Employee> copyEmployees(_employees.begin(), _employees.end());
+    
+    for(int i = 0; i < splitNum; i++) {
+        vector<Employee> empls(copyEmployees.begin() + sizeHandle * i, copyEmployees.begin() + sizeHandle * (i + 1));
+        promise<list<EmployeeDTO>> promiseHandle;
+        futures[i] = promiseHandle.get_future();
+        
+        threads[i] = thread(&EmployeeManager::readFileByThread, *this, move(promiseHandle), empls, month, year);
+    }
+    vector<list<EmployeeDTO>> employeeDtosVector;
+    
+    for(int i = 0; i < splitNum; i++) {
+        
+        list<EmployeeDTO> employeeDtos;
+        list<EmployeeDTO>::const_iterator itDto;
+        employeeDtos = futures[i].get();
+        
+        for (itDto = employeeDtos.begin(); itDto != employeeDtos.end(); itDto++) {
+            itDto->printInfo();
+            printCheckPointSortByDay(itDto->checkpoints(), month, year);
+            cout << "------\n";
+        }
+        employeeDtosVector.push_back(employeeDtos);
+    }
+
+    for(auto i = 0; i < splitNum; i++) {
+        threads[i].join();
+    }
+    
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
+    cout << "Time to read in microseconds: " << duration.count() << "\n";
+    
+    string csvOption;
+    cout << "Ban co muon xuat ket qua ra .csv Y/N ?";
+    cin >> csvOption;
+    if (csvOption == "Y" || csvOption == "y") {
+        cout << "Xuat file: " << FileIoUtils::genCheckpointHistoryMulti(employeeDtosVector, month, year);
+    }
 }
 
 void EmployeeManager::printEmployees()
@@ -217,12 +429,11 @@ list<CheckPoint> EmployeeManager::filterByMonth(const list<CheckPoint> & checkpo
     return result;
 }
 
-void EmployeeManager::printCheckPointSortByDay(list<CheckPoint> &checkpoints, int month, int year)
+void EmployeeManager::printCheckPointSortByDay(const list<CheckPoint> &checkpoints, int month, int year)
 {
     
-    checkpoints.sort();
-    int numberOfDays = getNumberOfDays(month, year);
-    string dayOfMonth[numberOfDays];
+//    checkpoints.sort();
+    int numberOfDays = DateUtils::getNumberOfDays(month, year);
     
     list<CheckPoint>::const_iterator itcp;
     
@@ -235,7 +446,7 @@ void EmployeeManager::printCheckPointSortByDay(list<CheckPoint> &checkpoints, in
         
         cout << dateStr + ": ";
         
-        string status = "-1xozooo";
+        string status = "-1xozoOo";
         for (itcp = checkpoints.begin(); itcp != checkpoints.end(); itcp++) {
             if(dateStr.compare(itcp->date()) == 0) {
                 cout << setw(2) << itcp->value() << ";" << "\t";
@@ -244,28 +455,112 @@ void EmployeeManager::printCheckPointSortByDay(list<CheckPoint> &checkpoints, in
                 break;
             }
         }
-        if(status == "-1xozooo"){
+        if(status == "-1xozoOo"){
             cout << setw(2) << "X" << ";" << "\t";
         }
-        if(i % 5 == 0) {
+        if(i % 10 == 0) {
             cout << "\n";
         }
     }
 }
-int EmployeeManager::getNumberOfDays(int month, int year)
+
+void EmployeeManager::genCheckpointSampleData()
 {
-    if(month == 2) {
-        if((year % 400 == 0) || (year % 4 == 0 && year % 100 != 0)){
-            return 29;
-        } else {
-            return 28;
-        }
-    } else if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12){
-        return 31;
-    }else {
-        return 30;
+    string months;
+    int year;
+    cout << "Nhap thang, cach nhau boi dau phay (,):\n";
+    cin >> months;
+    cout << "Nhap nam:\n";
+    cin >> year;
+    
+    string month;
+    vector<string> monthVector;
+    
+    stringstream strStream(months);
+    while (getline(strStream, month, ',')) {
+        monthVector.push_back(month);
+    }
+    
+    int sizeHandle = 1000;
+    long splitNum = (_employees.size() + sizeHandle - 1) / sizeHandle; // To round up, handle 500 employee in a thread
+    
+    thread threads[splitNum];
+    
+    vector<Employee> copyEmployees(_employees.begin(), _employees.end());
+    
+    for(int i = 0; i < splitNum; i++) {
+        vector<Employee> empls(copyEmployees.begin() + sizeHandle * i, copyEmployees.begin() + sizeHandle * (i + 1));
+        
+        threads[i] = thread(&EmployeeManager::appendCheckpointByThread, *this, monthVector, empls, year);
+    }
+    
+    for(auto i = 0; i < splitNum; i++) {
+        threads[i].join();
     }
 }
+
+void EmployeeManager::appendCheckpointByThread(const vector<string> & monthVector, const vector<Employee> & employees, int year)
+{
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+    int currenMonth = ltm->tm_mon + 1;
+    int currentYear = ltm->tm_year + 1900;
+    int currentDay = ltm->tm_mday;
+    
+    if(currentYear < year){
+        cout << "\n" << year << " > " << currentYear << endl;;
+        return;
+    }
+    
+    for (auto it : employees) {
+        list<CheckPoint> checkpoints;
+        
+        for(auto m : monthVector) {
+            if(stoi(m) > currenMonth) {
+                break;
+            }
+            
+            int numberOfDays = DateUtils::getNumberOfDays(stoi(m), year);
+            
+            list<CheckPoint>::const_iterator itcp;
+            
+            string monthStr = stoi(m) >= 10 ? m : "0" + m;
+            
+            for(int i = 1; i <= numberOfDays; i++){
+                if(year == currentYear && stoi(m) > currenMonth) {
+                    break;
+                }
+                if(year == currentYear && stoi(m) == currenMonth && i > currentDay) {
+                    break;
+                }
+                
+                string dayStr = i >= 10 ? to_string(i) : "0" + to_string(i);
+                string dateStr = dayStr + "/" + monthStr + "/" + to_string(year);
+                
+                int r = rand() % numberOfDays;
+                
+                CheckPoint *cp;
+                if(i == 31) {
+                    cp = new CheckPoint(it.id(), dateStr, "DLNN");
+                }
+                else if(r == 20) {
+                    cp = new CheckPoint(it.id(), dateStr, "NP");
+                }
+                else if(r == 7 || r == 15) {
+                    cp = new CheckPoint(it.id(), dateStr, "N");
+                }
+                else {
+                    cp = new CheckPoint(it.id(), dateStr, "DL");
+                }
+                checkpoints.push_back(*cp);
+            }
+        }
+        
+        FileIoUtils::appendCheckPoint(it.id(), checkpoints);
+    }
+
+}
+
 void EmployeeManager::refeshData()
 {
     _employees.clear();

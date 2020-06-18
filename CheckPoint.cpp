@@ -6,10 +6,12 @@
 //  Copyright © 2020 Trieu. All rights reserved.
 //
 
-#include "CheckPoint.h"
 #include <stdio.h>
 #include <string>
 #include <iostream>
+
+#include "CheckPoint.h"
+
 using namespace std;
 
 CheckPoint::CheckPoint(const string &employeeId, const string &date, const string &value)
