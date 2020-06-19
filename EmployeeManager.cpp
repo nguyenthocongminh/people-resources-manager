@@ -121,7 +121,6 @@ void EmployeeManager::searchByName()
     for (it = _employees.begin(); it != _employees.end(); it++) {
         if (StringUtils::containIgnoreCase(it->name(), name)) {
             it->printInfo();
-            cout << "\n";
             exist= true;
         }
     }
