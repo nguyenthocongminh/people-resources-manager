@@ -112,7 +112,8 @@ void EmployeeManager::searchByName()
 {
     string name;
     cout << "\nNhap ten: ";
-    cin >> name;
+    cin.get();
+    getline(cin, name);
     
     bool exist = false;
     

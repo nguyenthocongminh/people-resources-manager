@@ -92,6 +92,7 @@ void startApplication(){
             case 6:
                 _CLEAR;
                 EmployeeManager::instance()->searchByName();
+//                cin.ignore(1);
                 wait();
                 break;
             case 7:
