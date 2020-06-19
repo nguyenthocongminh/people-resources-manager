@@ -57,18 +57,23 @@ void EmployeeManager::insertEmployee()
     
     cout << "\nNhap id: ";
     getline(cin, id);
+    id = StringUtils::trim(id);
     
     cout << "\nNhap ten: ";
     getline(cin, name);
+    name = StringUtils::trim(name);
     
     cout << "\nNhap ngay sinh: ";
     getline(cin, dateOfBirth);
+    dateOfBirth = StringUtils::trim(dateOfBirth);
     
     cout << "\nNhap dia chi: ";
     getline(cin, address);
+    address = StringUtils::trim(address);
     
     cout << "\nNhap phong ban: ";
     getline(cin, department);
+    department = StringUtils::trim(department);
     
     Employee *employee = new Employee(id, name, dateOfBirth, address, department);
     
@@ -114,6 +119,7 @@ void EmployeeManager::searchByName()
     cout << "\nNhap ten: ";
     cin.get();
     getline(cin, name);
+    name = StringUtils::trim(name);
     
     bool exist = false;
     
@@ -331,6 +337,8 @@ void EmployeeManager::importCsv()
     cout << "Nhap file import: " << endl;
     string path;
     getline(cin, path);
+    path = StringUtils::trim(path);
+    
     if(!FileIoUtils::checkExist(path)){
         cout << "File khong ton tai !\n";
         return;
