@@ -16,6 +16,8 @@
 
 using namespace std;
 
+const string StringUtils::WHITESPACE = " \n\r\t\f\v";
+
 bool StringUtils::containIgnoreCase(const string &str1, const string &str2)
 {
     string str1_tmp, str2_tmp;
@@ -36,4 +38,21 @@ void StringUtils::toUpper(string &str) {
     for_each(str.begin(), str.end(), [](char & c) {
         c = toupper(c);
     });
+}
+
+string StringUtils::ltrim(const std::string& s)
+{
+    size_t start = s.find_first_not_of(WHITESPACE);
+    return (start == std::string::npos) ? "" : s.substr(start);
+}
+
+string StringUtils::rtrim(const std::string& s)
+{
+    size_t end = s.find_last_not_of(WHITESPACE);
+    return (end == std::string::npos) ? "" : s.substr(0, end + 1);
+}
+
+string StringUtils::trim(const std::string& s)
+{
+    return rtrim(ltrim(s));
 }

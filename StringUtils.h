@@ -18,9 +18,14 @@ using namespace std;
 class CheckPoint;
 class StringUtils {
     
+private:
+    const static string WHITESPACE;
 public:
     static bool containIgnoreCase(const string & str1, const string & str2);
     static void toLower(string & str);
     static void toUpper(string & str);
+    static string ltrim(const std::string& s);
+    static string trim(const std::string& s);
+    static string rtrim(const std::string& s);
 };
 #endif /* StringUtils_h */
