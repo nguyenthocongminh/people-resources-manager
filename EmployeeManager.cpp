@@ -112,7 +112,8 @@ void EmployeeManager::searchByName()
 {
     string name;
     cout << "\nNhap ten: ";
-    cin >> name;
+    cin.get();
+    getline(cin, name);
     
     bool exist = false;
     
@@ -120,6 +121,7 @@ void EmployeeManager::searchByName()
     for (it = _employees.begin(); it != _employees.end(); it++) {
         if (StringUtils::containIgnoreCase(it->name(), name)) {
             it->printInfo();
+            cout << "\n";
             exist= true;
         }
     }
